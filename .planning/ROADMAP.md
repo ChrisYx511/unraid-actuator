@@ -13,10 +13,12 @@ This roadmap builds trust in the actuator in the same order the product needs it
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Runtime Foundations & Initialization** - Make the package installable, importable, configurable, and dry-run/test friendly for one host. *(Completed 2026-04-22)*
-- [ ] **Phase 2: Desired-State Discovery & Validation** - Prove the managed repository can be modeled safely before any build or apply step.
-- [ ] **Phase 3: Runtime Build & Secret Materialization** - Generate the normalized actuator-managed runtime tree in ephemeral storage.
-- [ ] **Phase 4: Safe Deploy & Teardown** - Apply or remove validated built configurations at full-tree or scoped app/environment level.
-- [ ] **Phase 5: Reconcile Execution & Operator Visibility** - Reconcile new branch commits safely and make outcomes observable to the operator.
+- [x] **Phase 2: Desired-State Discovery & Validation** - Prove the managed repository can be modeled safely before any build or apply step. *(Completed 2026-04-22)*
+- [x] **Phase 3: Runtime Build & Secret Materialization** - Generate the normalized actuator-managed runtime tree in ephemeral storage. *(Completed 2026-04-22)*
+- [x] **Phase 4: Safe Deploy & Teardown** - Apply or remove validated built configurations at full-tree or scoped app/environment level. *(Completed 2026-04-22)*
+- [x] **Phase 5: Reconcile Execution & Operator Visibility** - Reconcile new branch commits safely and make outcomes observable to the operator. *(Completed 2026-04-22)*
+- [ ] **Phase 6: Build Safety & Verification Recovery** - Close the reopened build safety gaps and restore the missing Phase 3 audit trail.
+- [ ] **Phase 7: Git Failure Surface Hardening** - Normalize git failure handling for init and reconcile so operator flows fail cleanly.
 
 ## Phase Details
 
@@ -47,10 +49,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] `02-01-PLAN.md` — Define shared validation DTOs and strict host-root schema parsers/tests
-- [ ] `02-02-PLAN.md` — Discover host environments and enforce declared/undeclared/naming/XOR validation rules
-- [ ] `02-03-PLAN.md` — Add Compose preflight adapters, runner stdin support, and grouped validation reporting
-- [ ] `02-04-PLAN.md` — Orchestrate the validate service and wire full-host/scoped CLI execution
+- [x] `02-01-PLAN.md` — Define shared validation DTOs and strict host-root schema parsers/tests
+- [x] `02-02-PLAN.md` — Discover host environments and enforce declared/undeclared/naming/XOR validation rules
+- [x] `02-03-PLAN.md` — Add Compose preflight adapters, runner stdin support, and grouped validation reporting
+- [x] `02-04-PLAN.md` — Orchestrate the validate service and wire full-host/scoped CLI execution
 
 ### Phase 3: Runtime Build & Secret Materialization
 **Goal**: Operators can build a deterministic, actuator-managed runtime tree with normalized Compose output and merged environment data in ephemeral storage.
@@ -64,11 +66,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] `03-01-PLAN.md` — Replace build.py-era source detection with declarative template/value contracts and safe output-root helpers
-- [ ] `03-02-PLAN.md` — Render declarative templates and normalize Compose output without interpolation
-- [ ] `03-03-PLAN.md` — Decrypt EJSON host secrets and materialize merged `.env` files deterministically
-- [ ] `03-04-PLAN.md` — Orchestrate staged runtime-tree generation and build-root marker writes
-- [ ] `03-05-PLAN.md` — Align validation with template sources and expose the `build` CLI command
+- [x] `03-01-PLAN.md` — Replace build.py-era source detection with declarative template/value contracts and safe output-root helpers
+- [x] `03-02-PLAN.md` — Render declarative templates and normalize Compose output without interpolation
+- [x] `03-03-PLAN.md` — Decrypt EJSON host secrets and materialize merged `.env` files deterministically
+- [x] `03-04-PLAN.md` — Orchestrate staged runtime-tree generation and build-root marker writes
+- [x] `03-05-PLAN.md` — Align validation with template sources and expose the `build` CLI command
 
 ### Phase 4: Safe Deploy & Teardown
 **Goal**: Operators can apply or remove validated actuator-built configurations with safe scope handling.
@@ -81,9 +83,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] `04-01-PLAN.md` — Create the trusted runtime-tree contracts, full-tree/scoped target selection helpers, and explicit Compose command specs
-- [ ] `04-02-PLAN.md` — Implement fail-fast ordered deploy/teardown services over the marked runtime tree
-- [ ] `04-03-PLAN.md` — Expose `deploy` and `teardown` safely at the CLI boundary with paired scope handling
+- [x] `04-01-PLAN.md` — Create the trusted runtime-tree contracts, full-tree/scoped target selection helpers, and explicit Compose command specs
+- [x] `04-02-PLAN.md` — Implement fail-fast ordered deploy/teardown services over the marked runtime tree
+- [x] `04-03-PLAN.md` — Expose `deploy` and `teardown` safely at the CLI boundary with paired scope handling
 
 ### Phase 5: Reconcile Execution & Operator Visibility
 **Goal**: Operators can reconcile new desired state from Git safely, apply it with `docker compose up`, and see what happened.
@@ -95,7 +97,41 @@ Plans:
   3. When the candidate state is valid, reconcile tears down removed app/environments and applies the desired host state by running `docker compose up` against the generated runtime tree.
   4. Reconcile only advances the managed source tree after a successful build-and-apply sequence, and v1 success is based on `docker compose up` succeeding rather than container health gates.
   5. Operator can observe reconcile lifecycle events, failures, and compose/apply logs through syslog, Unraid notifications, and files under `/var/log/unraid-actuator/`.
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [x] `05-01-PLAN.md` — Add reconcile Git safety contracts, candidate checkout helpers, and declaration-driven removal planning
+- [x] `05-02-PLAN.md` — Add per-run visibility adapters, notification/syslog fan-out, and single-run locking
+- [x] `05-03-PLAN.md` — Reuse validate/build against candidate checkouts and implement the core reconcile service
+- [x] `05-04-PLAN.md` — Expose `reconcile` and `reconcile --dry-run` at the CLI boundary
+
+### Phase 6: Build Safety & Verification Recovery
+**Goal**: Re-close the build subsystem by enforcing validate-before-build safety, restoring missing Phase 3 verification artifacts, and realigning build documentation with the shipped template/value workflow.
+**Depends on**: Phase 5
+**Requirements**: BLD-01, BLD-02, BLD-03, BLD-04, BLD-05, BLD-06, BLD-07
+**Gap Closure**: Closes milestone-audit orphaning for `BLD-01..07`, closes `GAP-01`, and fixes the `validate -> build -> deploy` flow gap.
+**Success Criteria** (what must be TRUE):
+  1. `unraid-actuator build` cannot begin secret decryption/materialization for an invalid host tree; validation is enforced by the build workflow itself.
+  2. Phase 3 has complete audit artifacts (`03-*-SUMMARY.md` and `03-VERIFICATION.md`) so all build requirements are verifiably satisfied again.
+  3. Build-related planning/project docs describe the shipped template/value-based workflow rather than stale `build.py` wording.
+**Plans**: 2 plans
+
+Plans:
+- [ ] `06-01-PLAN.md` — Enforce validate-before-build in the build service/CLI and add unhappy-path coverage for invalid host trees
+- [ ] `06-02-PLAN.md` — Backfill Phase 3 summaries and verification, then realign build-related roadmap/requirements/project docs with the shipped workflow
+
+### Phase 7: Git Failure Surface Hardening
+**Goal**: Ensure git-related init and reconcile failures surface as clean operator-facing CLI errors instead of uncaught tracebacks.
+**Depends on**: Phase 6
+**Requirements**: Audit-only integration hardening (no reopened requirement ownership)
+**Gap Closure**: Closes `GAP-02` and the git failure handling flow gap from the milestone audit.
+**Success Criteria** (what must be TRUE):
+  1. Git clone/fetch/checkout/merge failures in init and reconcile return exit code `1` with the original failure message rendered cleanly to stderr.
+  2. Unit tests cover unhappy-path git failures at the CLI boundary for both init and reconcile entrypoints.
+**Plans**: 1 plan
+
+Plans:
+- [ ] `07-01-PLAN.md` — Normalize init/reconcile git RuntimeError handling at the CLI boundary and add unhappy-path coverage
 
 ## Progress
 
@@ -105,7 +141,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Runtime Foundations & Initialization | 2/2 | Complete | 2026-04-22 |
-| 2. Desired-State Discovery & Validation | 0/4 | Not started | - |
-| 3. Runtime Build & Secret Materialization | 0/5 | Not started | - |
-| 4. Safe Deploy & Teardown | 0/3 | Not started | - |
-| 5. Reconcile Execution & Operator Visibility | 0/TBD | Not started | - |
+| 2. Desired-State Discovery & Validation | 4/4 | Complete | 2026-04-22 |
+| 3. Runtime Build & Secret Materialization | 5/5 | Complete (reopened by audit) | 2026-04-22 |
+| 4. Safe Deploy & Teardown | 3/3 | Complete | 2026-04-22 |
+| 5. Reconcile Execution & Operator Visibility | 4/4 | Complete | 2026-04-22 |
+| 6. Build Safety & Verification Recovery | 0/2 | Not started | - |
+| 7. Git Failure Surface Hardening | 0/1 | Not started | - |

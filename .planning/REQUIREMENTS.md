@@ -9,60 +9,60 @@ Requirements for the initial release. These define the committed scope for the f
 
 ### Initialization & Configuration
 
-- [ ] **INIT-01**: Operator can initialize the actuator with infrastructure repository URL, deploy branch, hostname, and managed source path
-- [ ] **INIT-02**: Operator can initialize the actuator into a missing source directory and the command creates required folders automatically
-- [ ] **INIT-03**: Operator can initialize without recloning when the managed source directory is already non-empty
-- [ ] **INIT-04**: Operator can persist active actuator settings to `/tmp/actuator-cfg.yml`
+- [x] **INIT-01**: Operator can initialize the actuator with infrastructure repository URL, deploy branch, hostname, and managed source path
+- [x] **INIT-02**: Operator can initialize the actuator into a missing source directory and the command creates required folders automatically
+- [x] **INIT-03**: Operator can initialize without recloning when the managed source directory is already non-empty
+- [x] **INIT-04**: Operator can persist active actuator settings to `/tmp/actuator-cfg.yml`
 
 ### Discovery & Validation
 
-- [ ] **VAL-01**: Operator can validate all host configurations in the managed source tree
-- [ ] **VAL-02**: Operator can validate a single app/environment when both app and environment are specified
-- [ ] **VAL-03**: Operator receives a validation failure when an environment contains both `docker-compose.y[a]ml` and `build.py`
-- [ ] **VAL-04**: Operator receives a validation failure when an app/environment declared in `apps.yaml` is missing or invalid
-- [ ] **VAL-05**: Operator receives a warning, not a failure, when an undeclared app/environment exists but is invalid
-- [ ] **VAL-06**: Operator can validate dynamically generated Compose output by piping `build.py` output through `docker compose config -f -`
-- [ ] **VAL-07**: Operator receives schema-driven validation errors for malformed `apps.yaml` or actuator config files parsed with `strictyaml`
-- [ ] **VAL-08**: Operator receives a validation failure when compose project naming inputs are invalid or ambiguous for a managed app/environment
+- [x] **VAL-01**: Operator can validate all host configurations in the managed source tree
+- [x] **VAL-02**: Operator can validate a single app/environment when both app and environment are specified
+- [x] **VAL-03**: Operator receives a validation failure when an environment contains both `docker-compose.y[a]ml` and `build.py`
+- [x] **VAL-04**: Operator receives a validation failure when an app/environment declared in `apps.yaml` is missing or invalid
+- [x] **VAL-05**: Operator receives a warning, not a failure, when an undeclared app/environment exists but is invalid
+- [x] **VAL-06**: Operator can validate dynamically generated Compose output by piping `build.py` output through `docker compose config -f -`
+- [x] **VAL-07**: Operator receives schema-driven validation errors for malformed `apps.yaml` or actuator config files parsed with `strictyaml`
+- [x] **VAL-08**: Operator receives a validation failure when compose project naming inputs are invalid or ambiguous for a managed app/environment
 
 ### Build & Secrets
 
 - [ ] **BLD-01**: Operator can build all current host app/environment configurations into `/tmp/unraid-actuator/build` by default
 - [ ] **BLD-02**: Operator can build into a custom output path only when that path is empty before the build starts
 - [ ] **BLD-03**: Operator receives a safe failure when a non-default build output path is non-empty
-- [ ] **BLD-04**: Operator gets a normalized `docker-compose.yml` for every built environment regardless of whether the source came from a static Compose file or `build.py`
+- [ ] **BLD-04**: Operator gets a normalized `docker-compose.yml` for every built environment regardless of whether the source came from a static Compose file or the shipped template/value workflow
 - [ ] **BLD-05**: Operator gets a merged `.env` file per built environment that combines decrypted secret values with non-secret `.env` data
 - [ ] **BLD-06**: Operator gets a build failure when required secret decryption cannot complete for the selected host
 - [ ] **BLD-07**: Operator gets a build marker file named `.UNRAID_RUNNING_CONFIGURATION` at the root of each successful build tree
 
 ### Deploy & Teardown
 
-- [ ] **DEP-01**: Operator can deploy a full build tree only when it is marked as an actuator-generated running configuration
-- [ ] **DEP-02**: Operator can deploy a single app/environment only when both selectors are provided and that target is valid for the current host
-- [ ] **DEP-03**: Operator can tear down a full build tree or a single valid app/environment from the built configuration
-- [ ] **DEP-04**: Operator receives safe argument handling when only one of app or environment is provided
+- [x] **DEP-01**: Operator can deploy a full build tree only when it is marked as an actuator-generated running configuration
+- [x] **DEP-02**: Operator can deploy a single app/environment only when both selectors are provided and that target is valid for the current host
+- [x] **DEP-03**: Operator can tear down a full build tree or a single valid app/environment from the built configuration
+- [x] **DEP-04**: Operator receives safe argument handling when only one of app or environment is provided
 
 ### Reconciliation
 
-- [ ] **REC-01**: Operator can run reconcile and get a no-op success when the configured deploy branch has no new commits
-- [ ] **REC-02**: Operator can reconcile against a fetched candidate commit without mutating the managed source checkout first
-- [ ] **REC-03**: Operator gets a reconcile failure when the incoming candidate configuration is invalid
-- [ ] **REC-04**: Operator can tear down app/environments removed from the declared host state
-- [ ] **REC-05**: Operator can apply the current desired host state by running `docker compose up` against the generated runtime tree
-- [ ] **REC-06**: Operator only advances the managed source tree to the new commit after a successful build and apply sequence
+- [x] **REC-01**: Operator can run reconcile and get a no-op success when the configured deploy branch has no new commits
+- [x] **REC-02**: Operator can reconcile against a fetched candidate commit without mutating the managed source checkout first
+- [x] **REC-03**: Operator gets a reconcile failure when the incoming candidate configuration is invalid
+- [x] **REC-04**: Operator can tear down app/environments removed from the declared host state
+- [x] **REC-05**: Operator can apply the current desired host state by running `docker compose up` against the generated runtime tree
+- [x] **REC-06**: Operator only advances the managed source tree to the new commit after a successful build and apply sequence
 
 ### Observability & Testability
 
-- [ ] **OPS-01**: Operator gets `reconcile started` and `reconcile complete` lifecycle events in syslog
-- [ ] **OPS-02**: Operator gets reconcile failures reported to syslog and Unraid notifications
-- [ ] **OPS-03**: Operator gets reconcile log files, including compose apply output, written under `/var/log/unraid-actuator/`
-- [ ] **OPS-04**: Operator can inspect or simulate external command execution through a dry-run-friendly command runner architecture
+- [x] **OPS-01**: Operator gets `reconcile started` and `reconcile complete` lifecycle events in syslog
+- [x] **OPS-02**: Operator gets reconcile failures reported to syslog and Unraid notifications
+- [x] **OPS-03**: Operator gets reconcile log files, including compose apply output, written under `/var/log/unraid-actuator/`
+- [x] **OPS-04**: Operator can inspect or simulate external command execution through a dry-run-friendly command runner architecture
 
 ### Packaging & Developer Experience
 
-- [ ] **PKG-01**: Developer can build the project as a distributable Python package with `uv build`
-- [ ] **PKG-02**: Developer can import core actuator functionality from another `uv` project after installation
-- [ ] **PKG-03**: Developer can run unit tests that verify planning and command orchestration behavior without requiring live Docker, Git, or EJSON binaries for most cases
+- [x] **PKG-01**: Developer can build the project as a distributable Python package with `uv build`
+- [x] **PKG-02**: Developer can import core actuator functionality from another `uv` project after installation
+- [x] **PKG-03**: Developer can run unit tests that verify planning and command orchestration behavior without requiring live Docker, Git, or EJSON binaries for most cases
 
 ## v2 Requirements
 
@@ -95,42 +95,42 @@ Which phases cover which requirements. This section is updated during roadmap cr
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INIT-01 | Phase 1 | Pending |
-| INIT-02 | Phase 1 | Pending |
-| INIT-03 | Phase 1 | Pending |
-| INIT-04 | Phase 1 | Pending |
-| VAL-01 | Phase 2 | Pending |
-| VAL-02 | Phase 2 | Pending |
-| VAL-03 | Phase 2 | Pending |
-| VAL-04 | Phase 2 | Pending |
-| VAL-05 | Phase 2 | Pending |
-| VAL-06 | Phase 2 | Pending |
-| VAL-07 | Phase 2 | Pending |
-| VAL-08 | Phase 2 | Pending |
-| BLD-01 | Phase 3 | Pending |
-| BLD-02 | Phase 3 | Pending |
-| BLD-03 | Phase 3 | Pending |
-| BLD-04 | Phase 3 | Pending |
-| BLD-05 | Phase 3 | Pending |
-| BLD-06 | Phase 3 | Pending |
-| BLD-07 | Phase 3 | Pending |
-| DEP-01 | Phase 4 | Pending |
-| DEP-02 | Phase 4 | Pending |
-| DEP-03 | Phase 4 | Pending |
-| DEP-04 | Phase 4 | Pending |
-| REC-01 | Phase 5 | Pending |
-| REC-02 | Phase 5 | Pending |
-| REC-03 | Phase 5 | Pending |
-| REC-04 | Phase 5 | Pending |
-| REC-05 | Phase 5 | Pending |
-| REC-06 | Phase 5 | Pending |
-| OPS-01 | Phase 5 | Pending |
-| OPS-02 | Phase 5 | Pending |
-| OPS-03 | Phase 5 | Pending |
-| OPS-04 | Phase 1 | Pending |
-| PKG-01 | Phase 1 | Pending |
-| PKG-02 | Phase 1 | Pending |
-| PKG-03 | Phase 1 | Pending |
+| INIT-01 | Phase 1 | Complete |
+| INIT-02 | Phase 1 | Complete |
+| INIT-03 | Phase 1 | Complete |
+| INIT-04 | Phase 1 | Complete |
+| VAL-01 | Phase 2 | Complete |
+| VAL-02 | Phase 2 | Complete |
+| VAL-03 | Phase 2 | Complete |
+| VAL-04 | Phase 2 | Complete |
+| VAL-05 | Phase 2 | Complete |
+| VAL-06 | Phase 2 | Complete |
+| VAL-07 | Phase 2 | Complete |
+| VAL-08 | Phase 2 | Complete |
+| BLD-01 | Phase 6 | Pending |
+| BLD-02 | Phase 6 | Pending |
+| BLD-03 | Phase 6 | Pending |
+| BLD-04 | Phase 6 | Pending |
+| BLD-05 | Phase 6 | Pending |
+| BLD-06 | Phase 6 | Pending |
+| BLD-07 | Phase 6 | Pending |
+| DEP-01 | Phase 4 | Complete |
+| DEP-02 | Phase 4 | Complete |
+| DEP-03 | Phase 4 | Complete |
+| DEP-04 | Phase 4 | Complete |
+| REC-01 | Phase 5 | Complete |
+| REC-02 | Phase 5 | Complete |
+| REC-03 | Phase 5 | Complete |
+| REC-04 | Phase 5 | Complete |
+| REC-05 | Phase 5 | Complete |
+| REC-06 | Phase 5 | Complete |
+| OPS-01 | Phase 5 | Complete |
+| OPS-02 | Phase 5 | Complete |
+| OPS-03 | Phase 5 | Complete |
+| OPS-04 | Phase 1 | Complete |
+| PKG-01 | Phase 1 | Complete |
+| PKG-02 | Phase 1 | Complete |
+| PKG-03 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 36 total
@@ -139,4 +139,4 @@ Which phases cover which requirements. This section is updated during roadmap cr
 
 ---
 *Requirements defined: 2026-04-22*
-*Last updated: 2026-04-22 after roadmap creation*
+*Last updated: 2026-04-22 after milestone gap planning*
