@@ -78,7 +78,12 @@ Plans:
   1. Operator can deploy a full build tree only when it is marked as an actuator-generated running configuration.
   2. Operator can deploy a single app/environment only when both selectors are provided and the selected target is valid for the current host.
   3. Operator can tear down either the full built configuration or one valid app/environment from the built tree, and incomplete scope arguments fail safely instead of guessing intent.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] `04-01-PLAN.md` — Create the trusted runtime-tree contracts, full-tree/scoped target selection helpers, and explicit Compose command specs
+- [ ] `04-02-PLAN.md` — Implement fail-fast ordered deploy/teardown services over the marked runtime tree
+- [ ] `04-03-PLAN.md` — Expose `deploy` and `teardown` safely at the CLI boundary with paired scope handling
 
 ### Phase 5: Reconcile Execution & Operator Visibility
 **Goal**: Operators can reconcile new desired state from Git safely, apply it with `docker compose up`, and see what happened.
@@ -102,5 +107,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Runtime Foundations & Initialization | 2/2 | Complete | 2026-04-22 |
 | 2. Desired-State Discovery & Validation | 0/4 | Not started | - |
 | 3. Runtime Build & Secret Materialization | 0/5 | Not started | - |
-| 4. Safe Deploy & Teardown | 0/TBD | Not started | - |
+| 4. Safe Deploy & Teardown | 0/3 | Not started | - |
 | 5. Reconcile Execution & Operator Visibility | 0/TBD | Not started | - |
