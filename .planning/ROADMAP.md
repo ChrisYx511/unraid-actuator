@@ -61,7 +61,14 @@ Plans:
   2. Operator gets a safe build failure instead of a partial build when a non-default output path is non-empty or required secret decryption cannot complete.
   3. Every successful built environment contains a normalized `docker-compose.yml` regardless of whether the source came from a static Compose file or `build.py`.
   4. Every successful built environment contains a merged `.env` file combining decrypted secret values with non-secret environment data, and the build tree is marked with `.UNRAID_RUNNING_CONFIGURATION`.
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] `03-01-PLAN.md` — Replace build.py-era source detection with declarative template/value contracts and safe output-root helpers
+- [ ] `03-02-PLAN.md` — Render declarative templates and normalize Compose output without interpolation
+- [ ] `03-03-PLAN.md` — Decrypt EJSON host secrets and materialize merged `.env` files deterministically
+- [ ] `03-04-PLAN.md` — Orchestrate staged runtime-tree generation and build-root marker writes
+- [ ] `03-05-PLAN.md` — Align validation with template sources and expose the `build` CLI command
 
 ### Phase 4: Safe Deploy & Teardown
 **Goal**: Operators can apply or remove validated actuator-built configurations with safe scope handling.
@@ -94,6 +101,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Runtime Foundations & Initialization | 2/2 | Complete | 2026-04-22 |
 | 2. Desired-State Discovery & Validation | 0/4 | Not started | - |
-| 3. Runtime Build & Secret Materialization | 0/TBD | Not started | - |
+| 3. Runtime Build & Secret Materialization | 0/5 | Not started | - |
 | 4. Safe Deploy & Teardown | 0/TBD | Not started | - |
 | 5. Reconcile Execution & Operator Visibility | 0/TBD | Not started | - |
