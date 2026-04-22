@@ -95,48 +95,48 @@ Which phases cover which requirements. This section is updated during roadmap cr
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INIT-01 | TBD | Pending |
-| INIT-02 | TBD | Pending |
-| INIT-03 | TBD | Pending |
-| INIT-04 | TBD | Pending |
-| VAL-01 | TBD | Pending |
-| VAL-02 | TBD | Pending |
-| VAL-03 | TBD | Pending |
-| VAL-04 | TBD | Pending |
-| VAL-05 | TBD | Pending |
-| VAL-06 | TBD | Pending |
-| VAL-07 | TBD | Pending |
-| VAL-08 | TBD | Pending |
-| BLD-01 | TBD | Pending |
-| BLD-02 | TBD | Pending |
-| BLD-03 | TBD | Pending |
-| BLD-04 | TBD | Pending |
-| BLD-05 | TBD | Pending |
-| BLD-06 | TBD | Pending |
-| BLD-07 | TBD | Pending |
-| DEP-01 | TBD | Pending |
-| DEP-02 | TBD | Pending |
-| DEP-03 | TBD | Pending |
-| DEP-04 | TBD | Pending |
-| REC-01 | TBD | Pending |
-| REC-02 | TBD | Pending |
-| REC-03 | TBD | Pending |
-| REC-04 | TBD | Pending |
-| REC-05 | TBD | Pending |
-| REC-06 | TBD | Pending |
-| OPS-01 | TBD | Pending |
-| OPS-02 | TBD | Pending |
-| OPS-03 | TBD | Pending |
-| OPS-04 | TBD | Pending |
-| PKG-01 | TBD | Pending |
-| PKG-02 | TBD | Pending |
-| PKG-03 | TBD | Pending |
+| INIT-01 | Phase 1 | Pending |
+| INIT-02 | Phase 1 | Pending |
+| INIT-03 | Phase 1 | Pending |
+| INIT-04 | Phase 1 | Pending |
+| VAL-01 | Phase 2 | Pending |
+| VAL-02 | Phase 2 | Pending |
+| VAL-03 | Phase 2 | Pending |
+| VAL-04 | Phase 2 | Pending |
+| VAL-05 | Phase 2 | Pending |
+| VAL-06 | Phase 2 | Pending |
+| VAL-07 | Phase 2 | Pending |
+| VAL-08 | Phase 2 | Pending |
+| BLD-01 | Phase 3 | Pending |
+| BLD-02 | Phase 3 | Pending |
+| BLD-03 | Phase 3 | Pending |
+| BLD-04 | Phase 3 | Pending |
+| BLD-05 | Phase 3 | Pending |
+| BLD-06 | Phase 3 | Pending |
+| BLD-07 | Phase 3 | Pending |
+| DEP-01 | Phase 4 | Pending |
+| DEP-02 | Phase 4 | Pending |
+| DEP-03 | Phase 4 | Pending |
+| DEP-04 | Phase 4 | Pending |
+| REC-01 | Phase 5 | Pending |
+| REC-02 | Phase 5 | Pending |
+| REC-03 | Phase 5 | Pending |
+| REC-04 | Phase 5 | Pending |
+| REC-05 | Phase 5 | Pending |
+| REC-06 | Phase 5 | Pending |
+| OPS-01 | Phase 5 | Pending |
+| OPS-02 | Phase 5 | Pending |
+| OPS-03 | Phase 5 | Pending |
+| OPS-04 | Phase 1 | Pending |
+| PKG-01 | Phase 1 | Pending |
+| PKG-02 | Phase 1 | Pending |
+| PKG-03 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 36 total
-- Mapped to phases: 0
-- Unmapped: 36 ⚠️
+- Mapped to phases: 36
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-22*
-*Last updated: 2026-04-22 after initial definition*
+*Last updated: 2026-04-22 after roadmap creation*

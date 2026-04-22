@@ -1,0 +1,89 @@
+# Roadmap: unraid-actuator
+
+## Overview
+
+This roadmap builds trust in the actuator in the same order the product needs it: package and initialization foundations first, then strict desired-state validation, then deterministic runtime-tree generation, then safe deploy/teardown commands, and finally candidate-based reconciliation with operator-visible logging. Each phase delivers a complete, testable capability for one Unraid host while preserving dry-run friendliness, `uv_build` importability, and v1's safety-first definition of success.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+Decimal phases appear between their surrounding integers in numeric order.
+
+- [ ] **Phase 1: Runtime Foundations & Initialization** - Make the package installable, importable, configurable, and dry-run/test friendly for one host.
+- [ ] **Phase 2: Desired-State Discovery & Validation** - Prove the managed repository can be modeled safely before any build or apply step.
+- [ ] **Phase 3: Runtime Build & Secret Materialization** - Generate the normalized actuator-managed runtime tree in ephemeral storage.
+- [ ] **Phase 4: Safe Deploy & Teardown** - Apply or remove validated built configurations at full-tree or scoped app/environment level.
+- [ ] **Phase 5: Reconcile Execution & Operator Visibility** - Reconcile new branch commits safely and make outcomes observable to the operator.
+
+## Phase Details
+
+### Phase 1: Runtime Foundations & Initialization
+**Goal**: Operators and developers can install, import, configure, and safely exercise the actuator foundation for a single Unraid host.
+**Depends on**: Nothing (first phase)
+**Requirements**: INIT-01, INIT-02, INIT-03, INIT-04, OPS-04, PKG-01, PKG-02, PKG-03
+**Success Criteria** (what must be TRUE):
+  1. Developer can build the project with `uv build` and import core actuator functionality from another `uv` project after installation.
+  2. Operator can run `unraid-actuator init` with repository URL, deploy branch, hostname, and managed source path, and the command either creates a missing source directory or reuses an existing non-empty managed checkout without recloning.
+  3. Operator can inspect the active actuator settings persisted at `/tmp/actuator-cfg.yml` after initialization.
+  4. Developer can run unit tests and inspect or simulate external command execution through a dry-run-friendly command runner without needing live Docker, Git, or EJSON binaries for most cases.
+**Plans**: TBD
+
+### Phase 2: Desired-State Discovery & Validation
+**Goal**: Operators can trust that the desired host state is discovered and validated strictly before secrets are decrypted or runtime changes are attempted.
+**Depends on**: Phase 1
+**Requirements**: VAL-01, VAL-02, VAL-03, VAL-04, VAL-05, VAL-06, VAL-07, VAL-08
+**Success Criteria** (what must be TRUE):
+  1. Operator can validate either the full managed host tree or one specific app/environment when both selectors are provided.
+  2. Validation fails for declared app/environments that are missing, malformed, ambiguously defined, contain both `docker-compose.y[a]ml` and `build.py`, or produce invalid Compose project naming inputs.
+  3. Undeclared invalid app/environments surface as warnings instead of stopping validation for the declared host state.
+  4. Dynamic `build.py` environments are validated by rendering through `docker compose config -f -`, and malformed `apps.yaml` or actuator config files return schema-driven `strictyaml` errors.
+**Plans**: TBD
+
+### Phase 3: Runtime Build & Secret Materialization
+**Goal**: Operators can build a deterministic, actuator-managed runtime tree with normalized Compose output and merged environment data in ephemeral storage.
+**Depends on**: Phase 2
+**Requirements**: BLD-01, BLD-02, BLD-03, BLD-04, BLD-05, BLD-06, BLD-07
+**Success Criteria** (what must be TRUE):
+  1. Operator can build all current host configurations into `/tmp/unraid-actuator/build` by default, or into a custom path only when that custom path is empty before the build starts.
+  2. Operator gets a safe build failure instead of a partial build when a non-default output path is non-empty or required secret decryption cannot complete.
+  3. Every successful built environment contains a normalized `docker-compose.yml` regardless of whether the source came from a static Compose file or `build.py`.
+  4. Every successful built environment contains a merged `.env` file combining decrypted secret values with non-secret environment data, and the build tree is marked with `.UNRAID_RUNNING_CONFIGURATION`.
+**Plans**: TBD
+
+### Phase 4: Safe Deploy & Teardown
+**Goal**: Operators can apply or remove validated actuator-built configurations with safe scope handling.
+**Depends on**: Phase 3
+**Requirements**: DEP-01, DEP-02, DEP-03, DEP-04
+**Success Criteria** (what must be TRUE):
+  1. Operator can deploy a full build tree only when it is marked as an actuator-generated running configuration.
+  2. Operator can deploy a single app/environment only when both selectors are provided and the selected target is valid for the current host.
+  3. Operator can tear down either the full built configuration or one valid app/environment from the built tree, and incomplete scope arguments fail safely instead of guessing intent.
+**Plans**: TBD
+
+### Phase 5: Reconcile Execution & Operator Visibility
+**Goal**: Operators can reconcile new desired state from Git safely, apply it with `docker compose up`, and see what happened.
+**Depends on**: Phase 4
+**Requirements**: REC-01, REC-02, REC-03, REC-04, REC-05, REC-06, OPS-01, OPS-02, OPS-03
+**Success Criteria** (what must be TRUE):
+  1. Operator gets a no-op reconcile success when the configured deploy branch has no new commits to apply.
+  2. Reconcile evaluates a fetched candidate commit before mutating the managed source checkout, and invalid incoming state fails safely instead of being applied or treated as removed.
+  3. When the candidate state is valid, reconcile tears down removed app/environments and applies the desired host state by running `docker compose up` against the generated runtime tree.
+  4. Reconcile only advances the managed source tree after a successful build-and-apply sequence, and v1 success is based on `docker compose up` succeeding rather than container health gates.
+  5. Operator can observe reconcile lifecycle events, failures, and compose/apply logs through syslog, Unraid notifications, and files under `/var/log/unraid-actuator/`.
+**Plans**: TBD
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Runtime Foundations & Initialization | 0/TBD | Not started | - |
+| 2. Desired-State Discovery & Validation | 0/TBD | Not started | - |
+| 3. Runtime Build & Secret Materialization | 0/TBD | Not started | - |
+| 4. Safe Deploy & Teardown | 0/TBD | Not started | - |
+| 5. Reconcile Execution & Operator Visibility | 0/TBD | Not started | - |
