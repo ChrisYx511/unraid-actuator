@@ -29,7 +29,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Operator can run `unraid-actuator init` with repository URL, deploy branch, hostname, and managed source path, and the command either creates a missing source directory or reuses an existing non-empty managed checkout without recloning.
   3. Operator can inspect the active actuator settings persisted at `/tmp/actuator-cfg.yml` after initialization.
   4. Developer can run unit tests and inspect or simulate external command execution through a dry-run-friendly command runner without needing live Docker, Git, or EJSON binaries for most cases.
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] `01-01-PLAN.md` — Create the `uv_build` package scaffold, thin argparse CLI shell, and dry-run-friendly command runner/tests
+- [ ] `01-02-PLAN.md` — Implement the active-config contract and `init` clone-or-reuse workflow/tests
 
 ### Phase 2: Desired-State Discovery & Validation
 **Goal**: Operators can trust that the desired host state is discovered and validated strictly before secrets are decrypted or runtime changes are attempted.
@@ -82,7 +86,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Runtime Foundations & Initialization | 0/TBD | Not started | - |
+| 1. Runtime Foundations & Initialization | 0/2 | Not started | - |
 | 2. Desired-State Discovery & Validation | 0/TBD | Not started | - |
 | 3. Runtime Build & Secret Materialization | 0/TBD | Not started | - |
 | 4. Safe Deploy & Teardown | 0/TBD | Not started | - |
