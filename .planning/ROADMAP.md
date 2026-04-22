@@ -12,7 +12,7 @@ This roadmap builds trust in the actuator in the same order the product needs it
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Runtime Foundations & Initialization** - Make the package installable, importable, configurable, and dry-run/test friendly for one host.
+- [x] **Phase 1: Runtime Foundations & Initialization** - Make the package installable, importable, configurable, and dry-run/test friendly for one host. *(Completed 2026-04-22)*
 - [ ] **Phase 2: Desired-State Discovery & Validation** - Prove the managed repository can be modeled safely before any build or apply step.
 - [ ] **Phase 3: Runtime Build & Secret Materialization** - Generate the normalized actuator-managed runtime tree in ephemeral storage.
 - [ ] **Phase 4: Safe Deploy & Teardown** - Apply or remove validated built configurations at full-tree or scoped app/environment level.
@@ -32,8 +32,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] `01-01-PLAN.md` — Create the `uv_build` package scaffold, thin argparse CLI shell, and dry-run-friendly command runner/tests
-- [ ] `01-02-PLAN.md` — Implement the active-config contract and `init` clone-or-reuse workflow/tests
+- [x] `01-01-PLAN.md` — Create the `uv_build` package scaffold, thin argparse CLI shell, and dry-run-friendly command runner/tests
+- [x] `01-02-PLAN.md` — Implement the active-config contract and `init` clone-or-reuse workflow/tests
 
 ### Phase 2: Desired-State Discovery & Validation
 **Goal**: Operators can trust that the desired host state is discovered and validated strictly before secrets are decrypted or runtime changes are attempted.
@@ -44,7 +44,13 @@ Plans:
   2. Validation fails for declared app/environments that are missing, malformed, ambiguously defined, contain both `docker-compose.y[a]ml` and `build.py`, or produce invalid Compose project naming inputs.
   3. Undeclared invalid app/environments surface as warnings instead of stopping validation for the declared host state.
   4. Dynamic `build.py` environments are validated by rendering through `docker compose config -f -`, and malformed `apps.yaml` or actuator config files return schema-driven `strictyaml` errors.
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] `02-01-PLAN.md` — Define shared validation DTOs and strict host-root schema parsers/tests
+- [ ] `02-02-PLAN.md` — Discover host environments and enforce declared/undeclared/naming/XOR validation rules
+- [ ] `02-03-PLAN.md` — Add Compose preflight adapters, runner stdin support, and grouped validation reporting
+- [ ] `02-04-PLAN.md` — Orchestrate the validate service and wire full-host/scoped CLI execution
 
 ### Phase 3: Runtime Build & Secret Materialization
 **Goal**: Operators can build a deterministic, actuator-managed runtime tree with normalized Compose output and merged environment data in ephemeral storage.
@@ -86,8 +92,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Runtime Foundations & Initialization | 0/2 | Not started | - |
-| 2. Desired-State Discovery & Validation | 0/TBD | Not started | - |
+| 1. Runtime Foundations & Initialization | 2/2 | Complete | 2026-04-22 |
+| 2. Desired-State Discovery & Validation | 0/4 | Not started | - |
 | 3. Runtime Build & Secret Materialization | 0/TBD | Not started | - |
 | 4. Safe Deploy & Teardown | 0/TBD | Not started | - |
 | 5. Reconcile Execution & Operator Visibility | 0/TBD | Not started | - |
