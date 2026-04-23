@@ -2,148 +2,39 @@
 
 ## Overview
 
-This roadmap builds trust in the actuator in the same order the product needs it: package and initialization foundations first, then strict desired-state validation, then deterministic runtime-tree generation, then safe deploy/teardown commands, and finally candidate-based reconciliation with operator-visible logging. Each phase delivers a complete, testable capability for one Unraid host while preserving dry-run friendliness, `uv_build` importability, and v1's safety-first definition of success.
+The detailed v1.0 execution roadmap is now archived in `.planning/milestones/v1.0-ROADMAP.md`. The live roadmap stays intentionally compact after shipping so the next milestone can be planned without carrying full historical phase detail in the active context window.
+
+## Milestones
+
+- ✅ **v1.0 Initial Release** — Phases 1-7 shipped on 2026-04-23
+- 📋 **Next milestone** — Not planned yet; future roadmap work will continue from Phase 8
 
 ## Phases
 
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+<details>
+<summary>✅ v1.0 Initial Release (Phases 1-7) — SHIPPED 2026-04-23</summary>
 
-Decimal phases appear between their surrounding integers in numeric order.
+- [x] Phase 1: Runtime Foundations & Initialization (2/2 plans) — completed 2026-04-22
+- [x] Phase 2: Desired-State Discovery & Validation (4/4 plans) — completed 2026-04-22
+- [x] Phase 3: Runtime Build & Secret Materialization (5/5 plans) — completed 2026-04-22
+- [x] Phase 4: Safe Deploy & Teardown (3/3 plans) — completed 2026-04-22
+- [x] Phase 5: Reconcile Execution & Operator Visibility (4/4 plans) — completed 2026-04-22
+- [x] Phase 6: Build Safety & Verification Recovery (2/2 plans) — completed 2026-04-22
+- [x] Phase 7: Git Failure Surface Hardening (1/1 plan) — completed 2026-04-22
 
-- [x] **Phase 1: Runtime Foundations & Initialization** - Make the package installable, importable, configurable, and dry-run/test friendly for one host. *(Completed 2026-04-22)*
-- [x] **Phase 2: Desired-State Discovery & Validation** - Prove the managed repository can be modeled safely before any build or apply step. *(Completed 2026-04-22)*
-- [x] **Phase 3: Runtime Build & Secret Materialization** - Generate the normalized actuator-managed runtime tree in ephemeral storage. *(Completed 2026-04-22)*
-- [x] **Phase 4: Safe Deploy & Teardown** - Apply or remove validated built configurations at full-tree or scoped app/environment level. *(Completed 2026-04-22)*
-- [x] **Phase 5: Reconcile Execution & Operator Visibility** - Reconcile new branch commits safely and make outcomes observable to the operator. *(Completed 2026-04-22)*
-- [ ] **Phase 6: Build Safety & Verification Recovery** - Close the reopened build safety gaps and restore the missing Phase 3 audit trail.
-- [ ] **Phase 7: Git Failure Surface Hardening** - Normalize git failure handling for init and reconcile so operator flows fail cleanly.
-
-## Phase Details
-
-### Phase 1: Runtime Foundations & Initialization
-**Goal**: Operators and developers can install, import, configure, and safely exercise the actuator foundation for a single Unraid host.
-**Depends on**: Nothing (first phase)
-**Requirements**: INIT-01, INIT-02, INIT-03, INIT-04, OPS-04, PKG-01, PKG-02, PKG-03
-**Success Criteria** (what must be TRUE):
-  1. Developer can build the project with `uv build` and import core actuator functionality from another `uv` project after installation.
-  2. Operator can run `unraid-actuator init` with repository URL, deploy branch, hostname, and managed source path, and the command either creates a missing source directory or reuses an existing non-empty managed checkout without recloning.
-  3. Operator can inspect the active actuator settings persisted at `/tmp/actuator-cfg.yml` after initialization.
-  4. Developer can run unit tests and inspect or simulate external command execution through a dry-run-friendly command runner without needing live Docker, Git, or EJSON binaries for most cases.
-**Plans**: 2 plans
-
-Plans:
-- [x] `01-01-PLAN.md` — Create the `uv_build` package scaffold, thin argparse CLI shell, and dry-run-friendly command runner/tests
-- [x] `01-02-PLAN.md` — Implement the active-config contract and `init` clone-or-reuse workflow/tests
-
-### Phase 2: Desired-State Discovery & Validation
-**Goal**: Operators can trust that the desired host state is discovered and validated strictly before secrets are decrypted or runtime changes are attempted.
-**Depends on**: Phase 1
-**Requirements**: VAL-01, VAL-02, VAL-03, VAL-04, VAL-05, VAL-06, VAL-07, VAL-08
-**Success Criteria** (what must be TRUE):
-  1. Operator can validate either the full managed host tree or one specific app/environment when both selectors are provided.
-  2. Validation fails for declared app/environments that are missing, malformed, ambiguously defined, contain both `docker-compose.y[a]ml` and `build.py`, or produce invalid Compose project naming inputs.
-  3. Undeclared invalid app/environments surface as warnings instead of stopping validation for the declared host state.
-  4. Dynamic `build.py` environments are validated by rendering through `docker compose config -f -`, and malformed `apps.yaml` or actuator config files return schema-driven `strictyaml` errors.
-**Plans**: 4 plans
-
-Plans:
-- [x] `02-01-PLAN.md` — Define shared validation DTOs and strict host-root schema parsers/tests
-- [x] `02-02-PLAN.md` — Discover host environments and enforce declared/undeclared/naming/XOR validation rules
-- [x] `02-03-PLAN.md` — Add Compose preflight adapters, runner stdin support, and grouped validation reporting
-- [x] `02-04-PLAN.md` — Orchestrate the validate service and wire full-host/scoped CLI execution
-
-### Phase 3: Runtime Build & Secret Materialization
-**Goal**: Operators can build a deterministic, actuator-managed runtime tree with normalized Compose output and merged environment data in ephemeral storage.
-**Depends on**: Phase 2
-**Requirements**: BLD-01, BLD-02, BLD-03, BLD-04, BLD-05, BLD-06, BLD-07
-**Success Criteria** (what must be TRUE):
-  1. Operator can build all current host configurations into `/tmp/unraid-actuator/build` by default, or into a custom path only when that custom path is empty before the build starts.
-  2. Operator gets a safe build failure instead of a partial build when a non-default output path is non-empty or required secret decryption cannot complete.
-  3. Every successful built environment contains a normalized `docker-compose.yml` regardless of whether the source came from a static Compose file or `build.py`.
-  4. Every successful built environment contains a merged `.env` file combining decrypted secret values with non-secret environment data, and the build tree is marked with `.UNRAID_RUNNING_CONFIGURATION`.
-**Plans**: 5 plans
-
-Plans:
-- [x] `03-01-PLAN.md` — Replace build.py-era source detection with declarative template/value contracts and safe output-root helpers
-- [x] `03-02-PLAN.md` — Render declarative templates and normalize Compose output without interpolation
-- [x] `03-03-PLAN.md` — Decrypt EJSON host secrets and materialize merged `.env` files deterministically
-- [x] `03-04-PLAN.md` — Orchestrate staged runtime-tree generation and build-root marker writes
-- [x] `03-05-PLAN.md` — Align validation with template sources and expose the `build` CLI command
-
-### Phase 4: Safe Deploy & Teardown
-**Goal**: Operators can apply or remove validated actuator-built configurations with safe scope handling.
-**Depends on**: Phase 3
-**Requirements**: DEP-01, DEP-02, DEP-03, DEP-04
-**Success Criteria** (what must be TRUE):
-  1. Operator can deploy a full build tree only when it is marked as an actuator-generated running configuration.
-  2. Operator can deploy a single app/environment only when both selectors are provided and the selected target is valid for the current host.
-  3. Operator can tear down either the full built configuration or one valid app/environment from the built tree, and incomplete scope arguments fail safely instead of guessing intent.
-**Plans**: 3 plans
-
-Plans:
-- [x] `04-01-PLAN.md` — Create the trusted runtime-tree contracts, full-tree/scoped target selection helpers, and explicit Compose command specs
-- [x] `04-02-PLAN.md` — Implement fail-fast ordered deploy/teardown services over the marked runtime tree
-- [x] `04-03-PLAN.md` — Expose `deploy` and `teardown` safely at the CLI boundary with paired scope handling
-
-### Phase 5: Reconcile Execution & Operator Visibility
-**Goal**: Operators can reconcile new desired state from Git safely, apply it with `docker compose up`, and see what happened.
-**Depends on**: Phase 4
-**Requirements**: REC-01, REC-02, REC-03, REC-04, REC-05, REC-06, OPS-01, OPS-02, OPS-03
-**Success Criteria** (what must be TRUE):
-  1. Operator gets a no-op reconcile success when the configured deploy branch has no new commits to apply.
-  2. Reconcile evaluates a fetched candidate commit before mutating the managed source checkout, and invalid incoming state fails safely instead of being applied or treated as removed.
-  3. When the candidate state is valid, reconcile tears down removed app/environments and applies the desired host state by running `docker compose up` against the generated runtime tree.
-  4. Reconcile only advances the managed source tree after a successful build-and-apply sequence, and v1 success is based on `docker compose up` succeeding rather than container health gates.
-  5. Operator can observe reconcile lifecycle events, failures, and compose/apply logs through syslog, Unraid notifications, and files under `/var/log/unraid-actuator/`.
-**Plans**: 4 plans
-
-Plans:
-- [x] `05-01-PLAN.md` — Add reconcile Git safety contracts, candidate checkout helpers, and declaration-driven removal planning
-- [x] `05-02-PLAN.md` — Add per-run visibility adapters, notification/syslog fan-out, and single-run locking
-- [x] `05-03-PLAN.md` — Reuse validate/build against candidate checkouts and implement the core reconcile service
-- [x] `05-04-PLAN.md` — Expose `reconcile` and `reconcile --dry-run` at the CLI boundary
-
-### Phase 6: Build Safety & Verification Recovery
-**Goal**: Re-close the build subsystem by enforcing validate-before-build safety, restoring missing Phase 3 verification artifacts, and realigning build documentation with the shipped template/value workflow.
-**Depends on**: Phase 5
-**Requirements**: BLD-01, BLD-02, BLD-03, BLD-04, BLD-05, BLD-06, BLD-07
-**Gap Closure**: Closes milestone-audit orphaning for `BLD-01..07`, closes `GAP-01`, and fixes the `validate -> build -> deploy` flow gap.
-**Success Criteria** (what must be TRUE):
-  1. `unraid-actuator build` cannot begin secret decryption/materialization for an invalid host tree; validation is enforced by the build workflow itself.
-  2. Phase 3 has complete audit artifacts (`03-*-SUMMARY.md` and `03-VERIFICATION.md`) so all build requirements are verifiably satisfied again.
-  3. Build-related planning/project docs describe the shipped template/value-based workflow rather than stale `build.py` wording.
-**Plans**: 2 plans
-
-Plans:
-- [ ] `06-01-PLAN.md` — Enforce validate-before-build in the build service/CLI and add unhappy-path coverage for invalid host trees
-- [ ] `06-02-PLAN.md` — Backfill Phase 3 summaries and verification, then realign build-related roadmap/requirements/project docs with the shipped workflow
-
-### Phase 7: Git Failure Surface Hardening
-**Goal**: Ensure git-related init and reconcile failures surface as clean operator-facing CLI errors instead of uncaught tracebacks.
-**Depends on**: Phase 6
-**Requirements**: Audit-only integration hardening (no reopened requirement ownership)
-**Gap Closure**: Closes `GAP-02` and the git failure handling flow gap from the milestone audit.
-**Success Criteria** (what must be TRUE):
-  1. Git clone/fetch/checkout/merge failures in init and reconcile return exit code `1` with the original failure message rendered cleanly to stderr.
-  2. Unit tests cover unhappy-path git failures at the CLI boundary for both init and reconcile entrypoints.
-**Plans**: 1 plan
-
-Plans:
-- [ ] `07-01-PLAN.md` — Normalize init/reconcile git RuntimeError handling at the CLI boundary and add unhappy-path coverage
+</details>
 
 ## Progress
 
-**Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Runtime Foundations & Initialization | v1.0 | 2/2 | Complete | 2026-04-22 |
+| 2. Desired-State Discovery & Validation | v1.0 | 4/4 | Complete | 2026-04-22 |
+| 3. Runtime Build & Secret Materialization | v1.0 | 5/5 | Complete | 2026-04-22 |
+| 4. Safe Deploy & Teardown | v1.0 | 3/3 | Complete | 2026-04-22 |
+| 5. Reconcile Execution & Operator Visibility | v1.0 | 4/4 | Complete | 2026-04-22 |
+| 6. Build Safety & Verification Recovery | v1.0 | 2/2 | Complete | 2026-04-22 |
+| 7. Git Failure Surface Hardening | v1.0 | 1/1 | Complete | 2026-04-22 |
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Runtime Foundations & Initialization | 2/2 | Complete | 2026-04-22 |
-| 2. Desired-State Discovery & Validation | 4/4 | Complete | 2026-04-22 |
-| 3. Runtime Build & Secret Materialization | 5/5 | Complete (reopened by audit) | 2026-04-22 |
-| 4. Safe Deploy & Teardown | 3/3 | Complete | 2026-04-22 |
-| 5. Reconcile Execution & Operator Visibility | 4/4 | Complete | 2026-04-22 |
-| 6. Build Safety & Verification Recovery | 0/2 | Not started | - |
-| 7. Git Failure Surface Hardening | 0/1 | Not started | - |
+---
+*Last updated: 2026-04-23 after the v1.0 milestone archive*

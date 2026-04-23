@@ -1,42 +1,42 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: planning
-stopped_at: Gap closure phases created
-last_updated: "2026-04-22T20:45:00.000Z"
-last_activity: 2026-04-22 -- milestone audit gaps grouped into Phases 6 and 7
+milestone_name: Initial Release
+status: Planning next milestone
+stopped_at: Milestone v1.0 archived
+last_updated: "2026-04-23T03:39:18.007Z"
+last_activity: 2026-04-23 -- Archived milestone v1.0 Initial Release and reset the live planning surface for next-milestone work
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 7
   total_plans: 21
-  completed_plans: 18
-  percent: 86
+  completed_plans: 21
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-22)
+See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** The running Docker Compose state for one Unraid host can be reconciled to Git safely, predictably, and without applying invalid or ambiguous configuration.
-**Current focus:** Phase 06 — build-safety-&-verification-recovery
+**Current focus:** Planning next milestone
 
 ## Current Position
 
-Phase: 06 of 7 (build safety & verification recovery)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-04-22 -- milestone audit gaps grouped into Phases 6 and 7
+Phase: Milestone archived (v1.0 complete)
+Plan: No active phase plans
+Status: Planning next milestone
+Last activity: 2026-04-23 -- Archived milestone v1.0 Initial Release and reset the live planning surface for next-milestone work
 
-Progress: [████████░░] 86%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 18
+- Total plans completed: 21
 - Average duration: 0 min
 - Total execution time: 0.0 hours
 
@@ -54,7 +54,7 @@ Progress: [████████░░] 86%
 
 **Recent Trend:**
 
-- Last 5 plans: 04-03, 05-01, 05-02, 05-03, 05-04
+- Last 5 plans: 05-04, 06-01, 06-02, 07-01
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -66,26 +66,25 @@ Progress: [████████░░] 86%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [Phase 1]: Keep the initial foundation single-host, importable via `uv_build`, and dry-run/testable before any host mutation work.
 - [Phase 3]: Build output stays ephemeral and normalized, with merged secrets and an actuator-managed marker file.
 - [Phase 3]: Replace repo-executed `build.py` with declarative `template.yml` rendering from `values.yaml` only; keep secrets out of templates.
 - [Cross-phase]: YAML-backed actuator inputs should accept both `.yaml` and `.yml` extensions.
-- [Phase 4]: Stop full-tree deploy/teardown on first failure, require scoped targets to remain valid for the current host declaration, preserve `apps.y[a]ml` order, and do not use `--remove-orphans`.
 - [Phase 5]: v1 reconcile success is defined by successful `docker compose up`, not container health gates.
 - [Phase 5]: Reconcile rebuilds the current runtime tree from the managed known-good checkout when removals need it and the current runtime tree is missing or malformed.
-- [Milestone audit]: Phase 3 verification/summaries must be recovered before v1.0 can be archived, and build safety must be enforced at the service boundary rather than left to operator sequencing.
+- [Phase 6]: Build now validates before decrypt/materialization, and the Phase 3 audit trail is fully restored.
+- [Phase 7]: Git-related init/reconcile `RuntimeError` failures intentionally bubble; the stale audit blocker was documentation/test drift, not runtime behavior.
 
 ### Pending Todos
 
-None.
+- Post-v1.0 engineering follow-up requested: add Ruff lint/format, enable strict basedpyright, and address practical typing gaps.
 
 ### Blockers/Concerns
 
-- Phase 6 must close the reopened build safety and Phase 3 audit-traceability gaps.
-- Phase 7 must normalize git-related init/reconcile failure handling at the CLI boundary.
+- Optional host-only Docker/EJSON/Unraid checks remain non-blocking follow-up work.
+- No next-milestone requirements or roadmap phases have been defined yet.
 
 ## Session Continuity
 
-Last session: 2026-04-22T20:45:00.000Z
-Stopped at: Gap closure phases created
-Resume file: .planning/v1.0-MILESTONE-AUDIT.md
+Last session: 2026-04-23T03:39:18.007Z
+Stopped at: Milestone v1.0 archived
+Resume file: .planning/MILESTONES.md

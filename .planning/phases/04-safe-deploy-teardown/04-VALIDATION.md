@@ -38,18 +38,18 @@ created: 2026-04-22
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 04-01-01 | 04-01 | 1 | DEP-01, DEP-02, DEP-03 | unit | `uv run pytest tests/unit/test_deploy_tree.py -q` | ❌ Wave 0 | ⬜ pending |
-| 04-01-02 | 04-01 | 1 | DEP-01, DEP-03 | unit | `uv run pytest tests/unit/test_compose_runtime.py -q` | ❌ Wave 0 | ⬜ pending |
-| 04-02-01 | 04-02 | 2 | DEP-01, DEP-02 | unit | `uv run pytest tests/unit/test_deploy_service.py -q` | ❌ Wave 0 | ⬜ pending |
-| 04-02-02 | 04-02 | 2 | DEP-03 | unit | `uv run pytest tests/unit/test_teardown_service.py -q` | ❌ Wave 0 | ⬜ pending |
-| 04-03-01 | 04-03 | 3 | DEP-02, DEP-04 | unit | `uv run pytest tests/unit/test_deploy_cli.py -q` | ❌ Wave 0 | ⬜ pending |
-| 04-03-02 | 04-03 | 3 | DEP-03, DEP-04 | unit | `uv run pytest tests/unit/test_deploy_cli.py -q` | ❌ Wave 0 | ⬜ pending |
+| 04-01-01 | 04-01 | 1 | DEP-01, DEP-02, DEP-03 | unit | `uv run pytest tests/unit/test_deploy_tree.py -q` | task creates | ⬜ pending |
+| 04-01-02 | 04-01 | 1 | DEP-01, DEP-03 | unit | `uv run pytest tests/unit/test_compose_runtime.py -q` | task creates | ⬜ pending |
+| 04-02-01 | 04-02 | 2 | DEP-01, DEP-02 | unit | `uv run pytest tests/unit/test_deploy_service.py -q` | task creates | ⬜ pending |
+| 04-02-02 | 04-02 | 2 | DEP-03 | unit | `uv run pytest tests/unit/test_teardown_service.py -q` | task creates | ⬜ pending |
+| 04-03-01 | 04-03 | 3 | DEP-02, DEP-04 | unit | `uv run pytest tests/unit/test_deploy_cli.py -q` | task creates | ⬜ pending |
+| 04-03-02 | 04-03 | 3 | DEP-03, DEP-04 | unit | `uv run pytest tests/unit/test_deploy_cli.py -q` | task creates | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
 ---
 
-## Wave 0 Requirements
+## Planned Test Coverage
 
 - [ ] `tests/unit/test_deploy_tree.py` — marker trust, scoped current-host validity, declaration-order selection, and stale full-tree tolerance
 - [ ] `tests/unit/test_compose_runtime.py` — exact `docker compose up -d` / `down` command-spec coverage with forced `COMPOSE_REMOVE_ORPHANS=0`

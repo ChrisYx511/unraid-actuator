@@ -17,11 +17,16 @@
 - **D-03:** After the incoming candidate has been fetched, validated, and built successfully, reconcile should tear down removed app/environments first and only then apply the desired runtime tree.
 - **D-04:** If teardown of a removed app/environment fails during reconcile, stop the entire reconcile immediately and do not apply the incoming desired state.
 - **D-05:** v1 reconcile success is defined by successful `docker compose up` execution, not by post-apply container health checks.
+- **D-06:** If removals are required but the current marked runtime tree is missing or malformed, reconcile should first rebuild that current runtime tree from the current known-good managed checkout and only fail if that rebuild cannot be produced safely.
 
 ### Operator visibility
-- **D-06:** If the expected Unraid notification command is unavailable, reconcile should continue, emit a warning, and still write syslog/file logs.
-- **D-07:** When reconcile finds no new commits to apply, record the no-op success in syslog and reconcile log files only; reserve Unraid notifications for applied success and failures.
-- **D-08:** Reconcile should create one timestamped log file per run under `/var/log/unraid-actuator/`, rather than appending to a single rolling log.
+- **D-07:** If the expected Unraid notification command is unavailable, reconcile should continue, emit a warning, and still write syslog/file logs.
+- **D-08:** When reconcile finds no new commits to apply, record the no-op success in syslog and reconcile log files only; reserve Unraid notifications for applied success and failures.
+- **D-09:** Reconcile should create one timestamped log file per run under `/var/log/unraid-actuator/`, rather than appending to a single rolling log.
+
+### Dry-run and execution safety
+- **D-10:** Phase 5 should include a public `reconcile --dry-run` mode with explicit non-mutating behavior rather than relying on accidental composition of the existing service dry-run paths.
+- **D-11:** Phase 5 should include a single-run reconcile lock and fail when another reconcile is already active.
 
 ### the agent's Discretion
 - Exact internal module split for Git candidate inspection, reconcile logging, notification adapters, and source fast-forward helpers.
@@ -42,7 +47,7 @@
 | REC-01 | Operator can run reconcile and get a no-op success when the configured deploy branch has no new commits | Use `git fetch` + `git status --porcelain=v2 --branch` + exact SHA comparison before any build/apply |
 | REC-02 | Operator can reconcile against a fetched candidate commit without mutating the managed source checkout first | Use isolated incoming checkout/work area plus isolated candidate build root |
 | REC-03 | Operator gets a reconcile failure when the incoming candidate configuration is invalid | Reuse validation/build on the incoming checkout; do not compute removals until candidate validates/builds |
-| REC-04 | Operator can tear down app/environments removed from the declared host state | Diff current declared targets vs incoming declared targets in current declaration order; teardown from current marked build tree |
+| REC-04 | Operator can tear down app/environments removed from the declared host state | Diff current declared targets vs incoming declared targets in current declaration order; teardown from the current marked build tree or a rebuilt current tree from the managed known-good checkout when needed |
 | REC-05 | Operator can apply the current desired host state by running `docker compose up` against the generated runtime tree | Reuse `run_deploy(build_root=...)` against the candidate build root |
 | REC-06 | Operator only advances the managed source tree to the new commit after a successful build and apply sequence | Fast-forward managed checkout to the exact candidate SHA only after teardown/apply/promotion succeed |
 | OPS-01 | Operator gets `reconcile started` and `reconcile complete` lifecycle events in syslog | Add explicit syslog adapter around `logger` CLI and emit start/finish events |
@@ -223,8 +228,8 @@ def run_build(*, runner: CommandRunner, config_path: Path = ACTIVE_CONFIG_PATH, 
 ### Pitfall 5: Missing current runtime tree when removals exist
 **What goes wrong:** The desired candidate is valid, but there is no safe compose/env source for `docker compose down` on removed targets.
 **Why it happens:** The current build root lives under `/tmp` and may be gone after reboot or cleanup.
-**How to avoid:** Detect this explicitly and fail safe when removals require the current marked runtime tree but it is absent or malformed.
-**Warning signs:** Removed targets are planned and `require_marked_runtime_tree()` fails on the current build root.
+**How to avoid:** Rebuild the current runtime tree from the current known-good managed checkout before teardown, and only fail if that rebuild cannot be produced safely.
+**Warning signs:** Removed targets are planned, `require_marked_runtime_tree()` fails on the current build root, and the managed checkout cannot be rebuilt cleanly.
 
 ## Code Examples
 

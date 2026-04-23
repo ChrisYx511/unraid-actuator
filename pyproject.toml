@@ -1,0 +1,24 @@
+[build-system]
+requires = ["uv_build>=0.11.7,<0.12"]
+build-backend = "uv_build"
+
+[project]
+name = "unraid-actuator"
+version = "0.1.0"
+description = "Reconcile Git-managed Docker Compose state for a single Unraid host."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "jinja2>=3.1.6,<4",
+    "python-dotenv>=1.2.2,<2",
+    "strictyaml>=1.7.3,<2",
+]
+
+[project.scripts]
+unraid-actuator = "unraid_actuator.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8.3.5,<9"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
