@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Initial Release
 status: Planning next milestone
-stopped_at: Quick task 260423-m68 completed
-last_updated: "2026-04-23T19:59:11Z"
-last_activity: 2026-04-23 -- Completed quick task 260423-m68 to remove obsolete secret-key environment-variable guidance and rely on /opt/ejson/keys
+stopped_at: Quick task 260423-mau completed
+last_updated: "2026-04-23T20:04:54Z"
+last_activity: 2026-04-23 -- Completed quick task 260423-mau to expand the README with polished setup, prerequisites, installation, and usage guidance
 progress:
   total_phases: 7
   completed_phases: 7
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-23)
 Phase: Milestone archived (v1.0 complete)
 Plan: No active phase plans
 Status: Planning next milestone
-Last activity: 2026-04-23 -- Completed quick task 260423-m68 to remove obsolete secret-key environment-variable guidance and rely on /opt/ejson/keys
+Last activity: 2026-04-23 -- Completed quick task 260423-mau to expand the README with polished setup, prerequisites, installation, and usage guidance
 
 Progress: [██████████] 100%
 
@@ -94,9 +94,10 @@ None.
 | 260423-1uo | Allow template imports from the app directory but never above it | 2026-04-23 | 99d6168 | [260423-1uo-allow-template-imports-from-the-app-dire](./quick/260423-1uo-allow-template-imports-from-the-app-dire/) |
 | 260423-1yo | Copy entire environment contents into built output so docker-compose relative references keep working | 2026-04-23 | c300c8b | [260423-1yo-copy-entire-environment-contents-into-bu](./quick/260423-1yo-copy-entire-environment-contents-into-bu/) |
 | 260423-m68 | Remove obsolete secret-key environment-variable references and rely on /opt/ejson/keys | 2026-04-23 | 61a0df0 | [260423-m68-remove-references-to-unraid-actuator-sec](./quick/260423-m68-remove-references-to-unraid-actuator-sec/) |
+| 260423-mau | Expand the README with polished setup, prerequisites, installation, and usage guidance | 2026-04-23 | 88d505d | [260423-mau-expand-the-readme-with-polished-setup-pr](./quick/260423-mau-expand-the-readme-with-polished-setup-pr/) |
 
 ## Session Continuity
 
-Last session: 2026-04-23T19:59:11Z
-Stopped at: Quick task 260423-m68 completed
-Resume file: .planning/quick/260423-m68-remove-references-to-unraid-actuator-sec/260423-m68-SUMMARY.md
+Last session: 2026-04-23T20:04:54Z
+Stopped at: Quick task 260423-mau completed
+Resume file: .planning/quick/260423-mau-expand-the-readme-with-polished-setup-pr/260423-mau-SUMMARY.md
