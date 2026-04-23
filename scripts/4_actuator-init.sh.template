@@ -1,0 +1,27 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ -f "${HOME}/.local/bin/env" ]; then
+    # shellcheck disable=SC1091
+    . "${HOME}/.local/bin/env"
+fi
+
+export PATH="${HOME}/.local/bin:${PATH}"
+hash -r
+
+mkdir -p /opt/ejson/keys
+cp -a /boot/config/ejson-keys/. /opt/ejson/keys/
+find /opt/ejson/keys -type f -exec chmod 600 {} +
+find /opt/ejson/keys -type d -exec chmod 700 {} +
+
+# Replace these example values before running the script.
+export UNRAID_ACTUATOR_SECRET_KEY="REPLACE_WITH_YOUR_SECRET_KEY"
+
+unraid-actuator init \
+    --repo-url "https://github.com/example/your-infrastructure-repo.git" \
+    --deploy-branch "main" \
+    --hostname "tower" \
+    --source-path "/mnt/user/appdata/unraid-actuator/source"
+
+unraid-actuator validate
+unraid-actuator build
