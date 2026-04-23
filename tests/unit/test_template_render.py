@@ -25,14 +25,32 @@ def test_template_render_preserves_include_order(tmp_path: Path) -> None:
     assert rendered == "services:\n  app:\n    image: nginx:latest"
 
 
-def test_template_render_rejects_paths_outside_environment_root(tmp_path: Path) -> None:
+def test_template_render_allows_paths_from_shared_app_directory(tmp_path: Path) -> None:
     env_root = tmp_path / "nextcloud" / "production"
     env_root.mkdir(parents=True)
-    (env_root / "template.yml").write_text("template:\n  include:\n    - ../shared.j2\n", encoding="utf-8")
+    (env_root / "template.yml").write_text("template:\n  include:\n    - ../shared/base.j2\n", encoding="utf-8")
     (env_root / "values.yaml").write_text("image: nginx:latest\n", encoding="utf-8")
-    (tmp_path / "nextcloud" / "shared.j2").write_text("services: {}\n", encoding="utf-8")
+    shared_dir = tmp_path / "nextcloud" / "shared"
+    shared_dir.mkdir(parents=True)
+    (shared_dir / "base.j2").write_text("services:\n  app:\n    image: {{ image }}\n", encoding="utf-8")
 
-    with pytest.raises(ValueError, match="escapes environment root"):
+    rendered = render_template_environment(
+        env_root=env_root,
+        template_path=env_root / "template.yml",
+        values_path=env_root / "values.yaml",
+    )
+
+    assert rendered == "services:\n  app:\n    image: nginx:latest"
+
+
+def test_template_render_rejects_paths_outside_app_root(tmp_path: Path) -> None:
+    env_root = tmp_path / "nextcloud" / "production"
+    env_root.mkdir(parents=True)
+    (env_root / "template.yml").write_text("template:\n  include:\n    - ../../shared.j2\n", encoding="utf-8")
+    (env_root / "values.yaml").write_text("image: nginx:latest\n", encoding="utf-8")
+    (tmp_path / "shared.j2").write_text("services: {}\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="escapes app root"):
         render_template_environment(
             env_root=env_root,
             template_path=env_root / "template.yml",

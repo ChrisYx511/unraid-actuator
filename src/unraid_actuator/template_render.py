@@ -8,7 +8,7 @@ from .schemas import load_template_descriptor, load_values_yaml
 def render_template_environment(*, env_root: Path, template_path: Path, values_path: Path) -> str:
     includes = load_template_descriptor(template_path)
     values = load_values_yaml(values_path)
-    resolved_root = env_root.resolve()
+    resolved_app_root = env_root.resolve().parent
     fragments: list[str] = []
 
     for include in includes:
@@ -17,8 +17,8 @@ def render_template_environment(*, env_root: Path, template_path: Path, values_p
             resolved_include = include_path.resolve(strict=True)
         except FileNotFoundError as exc:
             raise ValueError(f"template include not found: {include}") from exc
-        if not resolved_include.is_relative_to(resolved_root):
-            raise ValueError(f"template include escapes environment root: {include}")
+        if not resolved_include.is_relative_to(resolved_app_root):
+            raise ValueError(f"template include escapes app root: {include}")
         fragments.append(resolved_include.read_text(encoding="utf-8").rstrip("\n"))
 
     combined = "\n".join(fragments)
