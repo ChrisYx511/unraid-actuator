@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Initial Release
 status: Planning next milestone
-stopped_at: Milestone v1.0 archived
-last_updated: "2026-04-23T03:39:18.007Z"
-last_activity: 2026-04-23 -- Archived milestone v1.0 Initial Release and reset the live planning surface for next-milestone work
+stopped_at: Quick task 260422-wz0 completed
+last_updated: "2026-04-23T03:53:12Z"
+last_activity: 2026-04-23 -- Completed quick task 260422-wz0 to add Ruff linting/formatting and strict basedpyright for src/
 progress:
   total_phases: 7
   completed_phases: 7
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-23)
 Phase: Milestone archived (v1.0 complete)
 Plan: No active phase plans
 Status: Planning next milestone
-Last activity: 2026-04-23 -- Archived milestone v1.0 Initial Release and reset the live planning surface for next-milestone work
+Last activity: 2026-04-23 -- Completed quick task 260422-wz0 to add Ruff linting/formatting and strict basedpyright for src/
 
 Progress: [██████████] 100%
 
@@ -76,15 +76,21 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Post-v1.0 engineering follow-up requested: add Ruff lint/format, enable strict basedpyright, and address practical typing gaps.
+None.
 
 ### Blockers/Concerns
 
 - Optional host-only Docker/EJSON/Unraid checks remain non-blocking follow-up work.
 - No next-milestone requirements or roadmap phases have been defined yet.
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260422-wz0 | Add ruff linting and formatting plus strict basedpyright and fix practical typing errors | 2026-04-23 | 1789589 | [260422-wz0-add-ruff-linting-and-formatting-plus-str](./quick/260422-wz0-add-ruff-linting-and-formatting-plus-str/) |
+
 ## Session Continuity
 
-Last session: 2026-04-23T03:39:18.007Z
-Stopped at: Milestone v1.0 archived
-Resume file: .planning/MILESTONES.md
+Last session: 2026-04-23T03:53:12Z
+Stopped at: Quick task 260422-wz0 completed
+Resume file: .planning/quick/260422-wz0-add-ruff-linting-and-formatting-plus-str/260422-wz0-SUMMARY.md
