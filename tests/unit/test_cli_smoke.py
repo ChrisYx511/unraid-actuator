@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import pytest
 
 from unraid_actuator import build_parser, main

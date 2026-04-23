@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .compose_build import normalize_rendered_compose, normalize_static_compose
 from .runner import CommandRunner
 from .template_render import render_template_environment

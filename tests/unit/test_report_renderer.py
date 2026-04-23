@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from unraid_actuator.report import render_validation_report
 from unraid_actuator.validation_models import (
     DeclaredEnvironment,

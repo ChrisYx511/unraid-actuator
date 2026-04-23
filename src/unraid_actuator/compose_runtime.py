@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .deploy_models import RuntimeTarget
 from .runner import CommandSpec
 from .validation_rules import compose_project_name

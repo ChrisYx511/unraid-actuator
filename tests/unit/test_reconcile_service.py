@@ -1,7 +1,6 @@
-from __future__ import annotations
-
 from contextlib import contextmanager
 from pathlib import Path
+from typing import Self
 
 import pytest
 
@@ -377,7 +376,7 @@ class FakeVisibility:
         self.command_logs: list[dict[str, object]] = []
         self.log_path = Path("/tmp/reconcile.log")
 
-    def __enter__(self) -> FakeVisibility:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, exc_type, exc, exc_tb) -> None:

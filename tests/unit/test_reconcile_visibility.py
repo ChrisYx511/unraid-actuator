@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 from unraid_actuator.reconcile_visibility import open_reconcile_log

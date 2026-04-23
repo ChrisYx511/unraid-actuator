@@ -1,12 +1,10 @@
-from __future__ import annotations
-
 import shutil
 from collections.abc import Callable
 from contextlib import AbstractContextManager
 from datetime import UTC, datetime
+from io import TextIOBase
 from pathlib import Path
 from types import TracebackType
-from typing import TextIO
 
 from .runner import CommandResult, CommandRunner, CommandSpec, format_command
 
@@ -18,7 +16,7 @@ class ReconcileVisibility(AbstractContextManager["ReconcileVisibility"]):
         self,
         *,
         runner: CommandRunner,
-        file_handle: TextIO,
+        file_handle: TextIOBase,
         log_path: Path,
         notify_resolver: Callable[[str], str | None],
     ) -> None:

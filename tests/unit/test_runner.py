@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from unraid_actuator.runner import (
     CommandSpec,
     DryRunRunner,

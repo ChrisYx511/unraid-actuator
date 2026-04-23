@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 from unraid_actuator.compose_runtime import compose_down_spec, compose_up_spec

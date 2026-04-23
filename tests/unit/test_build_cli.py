@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 from unraid_actuator.build_models import BuildResult, BuildTarget
