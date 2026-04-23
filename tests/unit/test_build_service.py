@@ -52,6 +52,77 @@ def test_builds_all_to_default_tmp_path(tmp_path: Path, monkeypatch: pytest.Monk
     ) == "DB_PASSWORD=cipher\nIMAGE=wrong\n"
 
 
+def test_build_copies_static_environment_contents_and_overwrites_runtime_outputs(tmp_path: Path) -> None:
+    config_path = _write_active_config(tmp_path)
+    host_root = tmp_path / "source" / "PotatoServer"
+    _write_host_contracts(
+        host_root,
+        apps_name="apps.yaml",
+        apps_text="apps:\n  nextcloud:\n    - production\n",
+        secret_text='{"_public_key":"' + ("a" * 64) + '","nextcloud":{"production":{"DB_PASSWORD":"cipher"}}}',
+    )
+    _write_compose_env(host_root, "nextcloud", "production")
+    env_root = host_root / "nextcloud" / "production"
+    (env_root / "docker-compose.yml").write_text("services:\n  app:\n    image: alpine\n", encoding="utf-8")
+    (env_root / ".env").write_text("SOURCE=1\n", encoding="utf-8")
+    (env_root / "config" / "prometheus.yml").parent.mkdir(parents=True, exist_ok=True)
+    (env_root / "config" / "prometheus.yml").write_text("scrape_configs: []\n", encoding="utf-8")
+    (env_root / ".dockerignore").write_text("tmp/\n", encoding="utf-8")
+    runner = RecordingRunner(
+        results=[
+            _result(stdout="services:\n  app:\n    image: busybox\n"),
+            _result(stdout='{"_public_key":"' + ("a" * 64) + '","nextcloud":{"production":{"DB_PASSWORD":"cipher"}}}'),
+            _result(stdout="services:\n  app:\n    image: busybox\n"),
+        ],
+        executed=True,
+    )
+
+    result = run_build(runner=runner, config_path=config_path, output_root=tmp_path / "build")
+
+    output_dir = result.output_root / "nextcloud" / "production"
+    assert (output_dir / "config" / "prometheus.yml").read_text(encoding="utf-8") == "scrape_configs: []\n"
+    assert (output_dir / ".dockerignore").read_text(encoding="utf-8") == "tmp/\n"
+    assert (output_dir / "docker-compose.yml").read_text(encoding="utf-8") == (
+        "services:\n  app:\n    image: busybox\n"
+    )
+    assert (output_dir / ".env").read_text(encoding="utf-8") == "DB_PASSWORD=cipher\nSOURCE=1\n"
+
+
+def test_build_copies_template_environment_sources_alongside_rendered_output(tmp_path: Path) -> None:
+    config_path = _write_active_config(tmp_path)
+    host_root = tmp_path / "source" / "PotatoServer"
+    _write_host_contracts(
+        host_root,
+        apps_name="apps.yaml",
+        apps_text="apps:\n  immich:\n    - preview\n",
+        secret_text='{"_public_key":"' + ("a" * 64) + '","immich":{"preview":{"DB_PASSWORD":"cipher"}}}',
+    )
+    _write_template_env(host_root, "immich", "preview")
+    env_root = host_root / "immich" / "preview"
+    (env_root / "assets" / "redis.conf").parent.mkdir(parents=True, exist_ok=True)
+    (env_root / "assets" / "redis.conf").write_text("appendonly yes\n", encoding="utf-8")
+    runner = RecordingRunner(
+        results=[
+            _result(stdout="services:\n  app:\n    image: nginx:latest\n"),
+            _result(stdout='{"_public_key":"' + ("a" * 64) + '","immich":{"preview":{"DB_PASSWORD":"cipher"}}}'),
+            _result(stdout="services:\n  app:\n    image: nginx:latest\n"),
+        ],
+        executed=True,
+    )
+
+    result = run_build(runner=runner, config_path=config_path, output_root=tmp_path / "build")
+
+    output_dir = result.output_root / "immich" / "preview"
+    assert (output_dir / "template.yml").read_text(encoding="utf-8").startswith("template:\n")
+    assert (output_dir / "compose.yaml.j2").read_text(encoding="utf-8").startswith("services:\n")
+    assert (output_dir / "values.yml").read_text(encoding="utf-8") == "IMAGE: nginx:latest\n"
+    assert (output_dir / "assets" / "redis.conf").read_text(encoding="utf-8") == "appendonly yes\n"
+    assert (output_dir / "docker-compose.yml").read_text(encoding="utf-8") == (
+        "services:\n  app:\n    image: nginx:latest\n"
+    )
+    assert (output_dir / ".env").read_text(encoding="utf-8") == "DB_PASSWORD=cipher\nIMAGE=wrong\n"
+
+
 def test_build_fails_before_decrypt_for_missing_or_ambiguous_declared_targets(
     tmp_path: Path,
 ) -> None:

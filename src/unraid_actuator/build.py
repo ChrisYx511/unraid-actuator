@@ -85,6 +85,7 @@ def run_build_for_host(
             project_name = compose_project_name(target.app, target.environment)
             output_dir = stage_root / target.app / target.environment
             output_dir.mkdir(parents=True, exist_ok=True)
+            _copy_environment_contents(source_env_dir=candidate.path, output_dir=output_dir)
 
             if candidate.source_kind == SourceKind.COMPOSE:
                 compose_text = normalize_static_compose(
@@ -140,6 +141,10 @@ def _format_validation_block(report: ValidationReport) -> str:
             descriptors.append(finding.code)
     unique_descriptors = ", ".join(dict.fromkeys(descriptors))
     return f"build blocked by validation errors: {unique_descriptors}"
+
+
+def _copy_environment_contents(*, source_env_dir: Path, output_dir: Path) -> None:
+    shutil.copytree(source_env_dir, output_dir, dirs_exist_ok=True)
 
 
 __all__ = ["run_build", "run_build_for_host"]
