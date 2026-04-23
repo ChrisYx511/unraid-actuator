@@ -12,7 +12,7 @@
 |---------|--------------|------------|-------|
 | Managed source checkout + persisted init config | Operators need a repeatable source of truth and a known working path | LOW | Covers repo URL, deploy branch, hostname, and clone location persistence. |
 | Strict config discovery and validation | No one will trust automated reconcile without strong validation | HIGH | Must validate declared apps/environments strictly and treat undeclared invalid configs as warnings only. |
-| Build of a normalized runtime tree | Safe deploys require a consistent artifact shape regardless of source form | HIGH | Every environment should become `docker-compose.yml` plus merged `.env` in a marked actuator build tree. |
+| Build of a normalized runtime tree | Safe deploys require a consistent artifact shape regardless of source form | HIGH | Every environment should become `docker-compose.yaml` plus merged `.env` in a marked actuator build tree. |
 | Compose validation against rendered output | Prevents bad deploys from malformed Compose or `build.py` output | MEDIUM | `docker compose config -q` should run against the final resolved output, including stdin validation for generated YAML. |
 | Deterministic project identity | Compose stacks must be stable across temp dirs and repeated runs | MEDIUM | Use host/app/environment-derived names, not directory names. |
 | Reconcile loop with changed-vs-removed handling | This is the core product behavior | HIGH | Must fetch, diff commits, validate candidate state, tear down removals, and deploy changes safely. |

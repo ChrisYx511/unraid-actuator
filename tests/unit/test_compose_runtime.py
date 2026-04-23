@@ -19,7 +19,7 @@ def test_compose_up_spec_is_explicit_and_no_orphan_removal() -> None:
         "--env-file",
         "/runtime/nextcloud/production/.env",
         "-f",
-        "/runtime/nextcloud/production/docker-compose.yml",
+        "/runtime/nextcloud/production/docker-compose.yaml",
         "up",
         "-d",
     )
@@ -44,7 +44,7 @@ def test_compose_down_spec_uses_plain_down_only() -> None:
         "--env-file",
         "/runtime/nextcloud/production/.env",
         "-f",
-        "/runtime/nextcloud/production/docker-compose.yml",
+        "/runtime/nextcloud/production/docker-compose.yaml",
         "down",
     )
     assert "-v" not in spec.argv
@@ -60,6 +60,6 @@ def _target() -> RuntimeTarget:
         app="nextcloud",
         environment="production",
         output_dir=output_dir,
-        compose_file=output_dir / "docker-compose.yml",
+        compose_file=output_dir / "docker-compose.yaml",
         env_file=output_dir / ".env",
     )

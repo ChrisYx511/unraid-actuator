@@ -4,6 +4,7 @@ from pathlib import Path
 
 DEFAULT_BUILD_ROOT = Path("/tmp/unraid-actuator/build")
 BUILD_MARKER_NAME = ".UNRAID_RUNNING_CONFIGURATION"
+RUNTIME_COMPOSE_FILENAME = "docker-compose.yaml"
 
 
 def resolve_output_root(output_root: Path | None) -> Path:
@@ -42,6 +43,7 @@ def promote_runtime_root(stage_root: Path, final_root: Path) -> None:
 __all__ = [
     "BUILD_MARKER_NAME",
     "DEFAULT_BUILD_ROOT",
+    "RUNTIME_COMPOSE_FILENAME",
     "create_stage_root",
     "promote_runtime_root",
     "resolve_output_root",

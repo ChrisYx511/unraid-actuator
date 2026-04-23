@@ -37,6 +37,16 @@ def test_valid_apps_yml_loads_declared_environments(tmp_path: Path) -> None:
     )
 
 
+def test_duplicate_apps_yaml_extensions_are_rejected(tmp_path: Path) -> None:
+    host_root = tmp_path / "PotatoServer"
+    host_root.mkdir()
+    (host_root / "apps.yaml").write_text("apps:\n  nextcloud:\n    - production\n", encoding="utf-8")
+    (host_root / "apps.yml").write_text("apps:\n  nextcloud:\n    - staging\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="multiple apps YAML files found"):
+        resolve_host_apps_path(host_root)
+
+
 def test_template_and_values_yaml_support_both_extensions(tmp_path: Path) -> None:
     env_root = tmp_path / "nextcloud" / "production"
     env_root.mkdir(parents=True)

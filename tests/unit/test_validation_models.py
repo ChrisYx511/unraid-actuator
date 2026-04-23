@@ -33,7 +33,7 @@ def test_discovered_environment_preserves_source_classification_fields() -> None
         path=Path("/tmp/nextcloud/production"),
         declared=True,
         source_kind=SourceKind.COMPOSE,
-        compose_files=(Path("docker-compose.yml"),),
+        compose_files=(Path("docker-compose.yaml"),),
         template_file=None,
         values_file=None,
     )
@@ -41,7 +41,7 @@ def test_discovered_environment_preserves_source_classification_fields() -> None
     assert candidate.app == "nextcloud"
     assert candidate.environment == "production"
     assert candidate.source_kind == SourceKind.COMPOSE
-    assert candidate.compose_files == (Path("docker-compose.yml"),)
+    assert candidate.compose_files == (Path("docker-compose.yaml"),)
     assert candidate.template_file is None
     assert candidate.values_file is None
 

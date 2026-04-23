@@ -9,7 +9,7 @@
 
 This project fits best as a small Python monolith with a thin CLI, strong schema validation, a deterministic build pipeline, and adapter-based command execution for `git`, `docker compose`, and `ejson`. The product’s core value is not “deployment automation” in the abstract; it is safe state reconciliation on a host that runs under cron, manages secrets, and must remain debuggable when something goes wrong.
 
-Research points toward a normalized runtime-tree model: fetch a target commit, parse and validate host/app/environment definitions strictly, render every environment into a consistent `docker-compose.yml` plus merged `.env`, and only then generate and apply a plan. The major risks are premature source-state advancement, Compose identity drift, ambient-environment interpolation surprises, and secret leakage to persistent media or logs.
+Research points toward a normalized runtime-tree model: fetch a target commit, parse and validate host/app/environment definitions strictly, render every environment into a consistent `docker-compose.yaml` plus merged `.env`, and only then generate and apply a plan. The major risks are premature source-state advancement, Compose identity drift, ambient-environment interpolation surprises, and secret leakage to persistent media or logs.
 
 ## Key Findings
 

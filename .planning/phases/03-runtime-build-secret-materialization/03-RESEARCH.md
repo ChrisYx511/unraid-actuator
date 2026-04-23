@@ -8,8 +8,8 @@
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
-- **D-01:** Replace `build.py` support with a declarative `template.yml` mechanism. Phase 3 should not execute repository-provided Python to generate Compose output.
-- **D-02:** `template.yml` should declare includes as:
+- **D-01:** Replace `build.py` support with a declarative `template.yaml` mechanism. Phase 3 should not execute repository-provided Python to generate Compose output.
+- **D-02:** `template.yaml` should declare includes as:
   ```yaml
   template:
     include:
@@ -23,12 +23,12 @@
 - **D-07:** Decrypted secret values belong only in the built `.env` output, not in template rendering inputs.
 - **D-08:** When the same key exists in both decrypted secrets and a non-secret `.env` file, the decrypted secret value overrides the `.env` value in the built output.
 - **D-09:** A declared app/environment may omit a matching secret block in `secret-env.ejson`; treat that case as an empty secret set rather than a build failure.
-- **D-10:** Keep the build output ephemeral and normalized under the actuator-managed runtime-tree contract already implied by the roadmap: each successful environment must emit a normalized `docker-compose.yml`, a merged `.env`, and the build root marker file `.UNRAID_RUNNING_CONFIGURATION`.
+- **D-10:** Keep the build output ephemeral and normalized under the actuator-managed runtime-tree contract already implied by the roadmap: each successful environment must emit a normalized `docker-compose.yaml`, a merged `.env`, and the build root marker file `.UNRAID_RUNNING_CONFIGURATION`.
 - **D-11:** Wherever the actuator accepts YAML-backed configuration files under its contract, it should accept both `.yaml` and `.yml` extensions rather than treating one as canonical-only.
 
 ### the agent's Discretion
 - Exact internal module split for template loading, Jinja rendering, secret decryption, `.env` parsing/merging, and build-tree writing.
-- Exact `strictyaml` schemas and helper DTOs for `template.yml` / `template.yaml` and `values.yml` / `values.yaml`, as long as they enforce the locked rendering rules above.
+- Exact `strictyaml` schemas and helper DTOs for `template.yaml` / `template.yml` and `values.yaml` / `values.yml`, as long as they enforce the locked rendering rules above.
 - Exact error/report formatting for build failures, as long as undefined template values and secret decryption failures surface clearly.
 - Exact file-permission and temp-directory helper details, as long as the runtime tree remains ephemeral and safe by default on Unraid.
 
@@ -45,7 +45,7 @@
 | BLD-01 | Operator can build all current host app/environment configurations into `/tmp/unraid-actuator/build` by default | Use stage-then-swap build root under `/tmp/unraid-actuator`, with final path fixed at `/tmp/unraid-actuator/build` |
 | BLD-02 | Operator can build into a custom output path only when that path is empty before the build starts | Validate custom target is missing or an empty real directory before any work begins |
 | BLD-03 | Operator receives a safe failure when a non-default build output path is non-empty | Reject non-empty custom targets before decryption/rendering; never partially write into them |
-| BLD-04 | Operator gets a normalized `docker-compose.yml` for every built environment regardless of whether the source came from a static Compose file or `build.py` | Superseded by locked Phase 3 context: normalize static Compose or declarative `template.yml` source via `docker compose config --no-interpolate --format yaml` |
+| BLD-04 | Operator gets a normalized `docker-compose.yaml` for every built environment regardless of whether the source came from a static Compose file or `build.py` | Superseded by locked Phase 3 context: normalize static Compose or declarative `template.yaml` source via `docker compose config --no-interpolate --format yaml` |
 | BLD-05 | Operator gets a merged `.env` file per built environment that combines decrypted secret values with non-secret `.env` data | Parse `.env` with `python-dotenv`, merge secret map last, serialize deterministically |
 | BLD-06 | Operator gets a build failure when required secret decryption cannot complete for the selected host | Use `ejson decrypt` via runner; fail host build before final swap on non-zero exit or malformed decrypted JSON |
 | BLD-07 | Operator gets a build marker file named `.UNRAID_RUNNING_CONFIGURATION` at the root of each successful build tree | Write marker into staged tree just before final swap so only successful trees are marked |
@@ -64,7 +64,7 @@
 
 Phase 3 should build a normalized runtime tree from two allowed source shapes only: static `docker-compose.y[a]ml` or declarative `template.y[a]ml` plus `values.y[a]ml`. The safest contract is a strict three-step pipeline per environment: classify source, render/normalize Compose without interpolation, then materialize a merged `.env` where decrypted secrets override non-secret values. Do not let secrets into Jinja inputs, Compose interpolation, or logs.
 
-The most important implementation detail is to keep Compose normalization secret-free and deterministic. Docker Compose interpolates environment values by default, so normalization must use `docker compose config --no-interpolate --format yaml` and disable automatic `.env` loading (`COMPOSE_DISABLE_ENV_FILE=1`). Otherwise the same repo can render differently under cron vs interactive shells, or worse, bake secret values into `docker-compose.yml`.
+The most important implementation detail is to keep Compose normalization secret-free and deterministic. Docker Compose interpolates environment values by default, so normalization must use `docker compose config --no-interpolate --format yaml` and disable automatic `.env` loading (`COMPOSE_DISABLE_ENV_FILE=1`). Otherwise the same repo can render differently under cron vs interactive shells, or worse, bake secret values into `docker-compose.yaml`.
 
 For build-root safety, use a stage-then-swap strategy. Build into a sibling staging directory, and only replace the final output path after all environments succeed and the root marker is present. This gives safe failure semantics for both the default tmp path and custom output paths while preserving the “ephemeral by default” Unraid posture.
 
@@ -134,13 +134,13 @@ src/unraid_actuator/
 # Source: repo constraints + existing discovery.py pattern
 compose_files = tuple(
     candidate for candidate in (
-        env_dir / "docker-compose.yml",
+        env_dir / "docker-compose.yaml",
         env_dir / "docker-compose.yaml",
     ) if candidate.is_file()
 )
 template_files = tuple(
     candidate for candidate in (
-        env_dir / "template.yml",
+        env_dir / "template.yaml",
         env_dir / "template.yaml",
     ) if candidate.is_file()
 )
@@ -359,7 +359,7 @@ ejson decrypt secret-env.ejson
 | BLD-01 | default build root is `/tmp/unraid-actuator/build` | unit | `uv run pytest tests/unit/test_build_service.py::test_builds_all_to_default_tmp_path -q` | ❌ Wave 0 |
 | BLD-02 | custom output path allowed only when empty | unit | `uv run pytest tests/unit/test_build_paths.py::test_custom_output_path_must_be_empty_or_missing -q` | ❌ Wave 0 |
 | BLD-03 | non-empty custom path fails safely without partial writes | unit | `uv run pytest tests/unit/test_build_paths.py::test_non_default_non_empty_path_fails_before_build -q` | ❌ Wave 0 |
-| BLD-04 | static compose and template source both normalize to `docker-compose.yml` | unit + manual integration | `uv run pytest tests/unit/test_compose_build.py::test_normalizes_static_and_template_sources -q` | ❌ Wave 0 |
+| BLD-04 | static compose and template source both normalize to `docker-compose.yaml` | unit + manual integration | `uv run pytest tests/unit/test_compose_build.py::test_normalizes_static_and_template_sources -q` | ❌ Wave 0 |
 | BLD-05 | merged `.env` gives secret precedence | unit | `uv run pytest tests/unit/test_env_materialize.py::test_secret_values_override_non_secret_env -q` | ❌ Wave 0 |
 | BLD-06 | ejson failure aborts build safely | unit | `uv run pytest tests/unit/test_secrets.py::test_decrypt_failure_aborts_build -q` | ❌ Wave 0 |
 | BLD-07 | marker file written only for successful trees | unit | `uv run pytest tests/unit/test_build_service.py::test_successful_build_writes_marker_file -q` | ❌ Wave 0 |

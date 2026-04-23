@@ -177,7 +177,7 @@ CommandSpec(
 3. Parse `apps.yaml` with `strictyaml`; fail with schema error details if invalid.
 4. Parse `secret-env.ejson` as JSON only; require top-level object and `_public_key`.
 5. Discover filesystem app/environment candidates.
-6. Enforce source XOR: exactly one of `docker-compose.yml` / `docker-compose.yaml` / `build.py` family, with `docker-compose.yml` and `docker-compose.yaml` treated as equivalent Compose sources.
+6. Enforce source XOR: exactly one of the `docker-compose.yaml` / `docker-compose.yml` / `build.py` family, with `docker-compose.yaml` and `docker-compose.yml` treated as equivalent Compose sources.
 7. Validate naming inputs for every declared target before any Compose subprocess call.
 8. For static Compose: `docker compose -p <name> -f <compose-file> config -q`.
 9. For dynamic `build.py`: run isolated subprocess, capture YAML stdout, then `docker compose -p <name> -f - config -q`.
@@ -229,7 +229,7 @@ CommandSpec(
 **Warning signs:** `build.py` can see unrelated host env vars or imports from ambient paths.
 
 ### Pitfall 5: Compose-source XOR checks that miss filename variants
-**What goes wrong:** an environment with `docker-compose.yml` and `docker-compose.yaml` or `build.py` slips through.
+**What goes wrong:** an environment with both `docker-compose.yaml` and `docker-compose.yml`, or with any Compose file plus `build.py`, slips through.
 **Why it happens:** validation checks only one filename or checks too late.
 **How to avoid:** classify source files before any deeper validation and treat both Compose filenames as the same source class.
 **Warning signs:** validation reaches `docker compose config` before reporting source ambiguity.

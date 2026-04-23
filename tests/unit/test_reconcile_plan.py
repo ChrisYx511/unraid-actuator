@@ -57,7 +57,7 @@ def test_plan_removed_targets_requires_rebuild_for_untrusted_runtime_tree(tmp_pa
         (runtime_root / BUILD_MARKER_NAME).write_text("", encoding="utf-8")
         target_dir = runtime_root / "immich" / "preview"
         target_dir.mkdir(parents=True, exist_ok=True)
-        (target_dir / "docker-compose.yml").write_text("services: {}\n", encoding="utf-8")
+        (target_dir / "docker-compose.yaml").write_text("services: {}\n", encoding="utf-8")
 
     plan = plan_removed_targets(
         current_host_root=current_host_root,
@@ -103,5 +103,5 @@ def _write_marked_runtime_tree(build_root: Path, *targets: tuple[str, str]) -> P
 def _write_runtime_target(build_root: Path, app: str, environment: str) -> None:
     target_dir = build_root / app / environment
     target_dir.mkdir(parents=True, exist_ok=True)
-    (target_dir / "docker-compose.yml").write_text("services: {}\n", encoding="utf-8")
+    (target_dir / "docker-compose.yaml").write_text("services: {}\n", encoding="utf-8")
     (target_dir / ".env").write_text("KEY=value\n", encoding="utf-8")

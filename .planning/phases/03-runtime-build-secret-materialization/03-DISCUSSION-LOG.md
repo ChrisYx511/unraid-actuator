@@ -13,9 +13,9 @@
 |--------|-------------|----------|
 | Separate-process `build.py` with minimal environment | Keep repo-executed Python but tighten trust boundaries | |
 | Separate-process `build.py` with inherited environment | Keep executable Python with broader environment access | |
-| Declarative `template.yml` + included Jinja templates + `values.yaml` | Replace executable repo code with data-driven rendering | ✓ |
+| Declarative `template.yaml` + included Jinja templates + `values.yaml` | Replace executable repo code with data-driven rendering | ✓ |
 
-**User's choice:** Replace `build.py` with declarative `template.yml` rendering to avoid executable code in the infrastructure definition repository.
+**User's choice:** Replace `build.py` with declarative `template.yaml` rendering to avoid executable code in the infrastructure definition repository.
 
 ## Template rendering inputs
 
@@ -64,7 +64,7 @@
 ## the agent's Discretion
 
 - Internal module boundaries for rendering, parsing, and build orchestration
-- Exact `strictyaml` schemas for `template.yml` and `values.yaml`
+- Exact `strictyaml` schemas for `template.yaml` and `values.yaml`
 - Exact failure-message formatting and dry-run internals
 
 ## Deferred Ideas

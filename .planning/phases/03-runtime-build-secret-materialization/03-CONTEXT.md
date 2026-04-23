@@ -14,8 +14,8 @@ Generate a deterministic, actuator-managed runtime tree for the configured host 
 ## Implementation Decisions
 
 ### Dynamic Compose generation model
-- **D-01:** Replace `build.py` support with a declarative `template.yml` mechanism. Phase 3 should not execute repository-provided Python to generate Compose output.
-- **D-02:** `template.yml` should declare includes as:
+- **D-01:** Replace `build.py` support with a declarative `template.yaml` mechanism. Phase 3 should not execute repository-provided Python to generate Compose output.
+- **D-02:** `template.yaml` should declare includes as:
   ```yaml
   template:
     include:
@@ -33,12 +33,12 @@ Generate a deterministic, actuator-managed runtime tree for the configured host 
 - **D-09:** A declared app/environment may omit a matching secret block in `secret-env.ejson`; treat that case as an empty secret set rather than a build failure.
 
 ### Build tree behavior
-- **D-10:** Keep the build output ephemeral and normalized under the actuator-managed runtime-tree contract already implied by the roadmap: each successful environment must emit a normalized `docker-compose.yml`, a merged `.env`, and the build root marker file `.UNRAID_RUNNING_CONFIGURATION`.
+- **D-10:** Keep the build output ephemeral and normalized under the actuator-managed runtime-tree contract already implied by the roadmap: each successful environment must emit a normalized `docker-compose.yaml`, a merged `.env`, and the build root marker file `.UNRAID_RUNNING_CONFIGURATION`.
 - **D-11:** Wherever the actuator accepts YAML-backed configuration files under its contract, it should accept both `.yaml` and `.yml` extensions rather than treating one as canonical-only.
 
 ### the agent's Discretion
 - Exact internal module split for template loading, Jinja rendering, secret decryption, `.env` parsing/merging, and build-tree writing.
-- Exact `strictyaml` schemas and helper DTOs for `template.yml` / `template.yaml` and `values.yml` / `values.yaml`, as long as they enforce the locked rendering rules above.
+- Exact `strictyaml` schemas and helper DTOs for `template.yaml` / `template.yml` and `values.yaml` / `values.yml`, as long as they enforce the locked rendering rules above.
 - Exact error/report formatting for build failures, as long as undefined template values and secret decryption failures surface clearly.
 - Exact file-permission and temp-directory helper details, as long as the runtime tree remains ephemeral and safe by default on Unraid.
 
@@ -74,7 +74,7 @@ Generate a deterministic, actuator-managed runtime tree for the configured host 
 - `src/unraid_actuator/discovery.py` — already discovers the host/app/environment tree and can likely be extended for Phase 3 source-shape detection
 - `src/unraid_actuator/runner.py` — shared command abstraction remains the right place for invoking external tools such as secret decryption helpers or future Compose checks
 - `src/unraid_actuator/cli.py` — thin argparse shell is ready to grow a `build` subcommand without mixing in orchestration logic
-- `src/unraid_actuator/schemas.py` — existing strict parsing boundary should be extended for `template.yml` / `values.yaml` contracts
+- `src/unraid_actuator/schemas.py` — existing strict parsing boundary should be extended for `template.yaml` / `values.yaml` contracts
 
 ### Established Patterns
 - Runtime commands are routed through a thin CLI into service-style functions
@@ -86,7 +86,7 @@ Generate a deterministic, actuator-managed runtime tree for the configured host 
 - Extend discovery/schema logic to recognize declarative template-based environments in place of `build.py`
 - Add Jinja2-backed rendering helpers using `values.yaml` / `values.yml` only, with strict undefined-variable behavior
 - Reuse the existing runner abstraction for external secret-decryption steps and keep the build path dry-run/test friendly
-- Plan for a follow-on alignment between validation and build source-shape rules, since the earlier `build.py` assumption is now superseded by `template.yml`
+- Plan for a follow-on alignment between validation and build source-shape rules, since the earlier `build.py` assumption is now superseded by `template.yaml`
 
 </code_context>
 

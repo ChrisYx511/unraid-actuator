@@ -46,22 +46,22 @@ The managed infrastructure repository is host-centric. Each host directory conta
     ├── secret-env.ejson
     └── <app>/
         └── <environment>/
-            ├── docker-compose.yml
+            ├── docker-compose.yaml
             ├── .env
-            ├── template.yml
+            ├── template.yaml
             ├── values.yaml
             └── other files referenced by docker compose
 ```
 
 Supported inputs per environment:
 
-- One static compose file: `docker-compose.yml` or `docker-compose.yaml`
-- Or one template descriptor: `template.yml` or `template.yaml`
-- When templated, one matching values file: `values.yml` or `values.yaml`
+- One static compose file: `docker-compose.yaml` or `docker-compose.yml`
+- Or one template descriptor: `template.yaml` or `template.yml`
+- When templated, one matching values file: `values.yaml` or `values.yml`
 - Optional `.env`
 - Additional files or directories referenced by Compose, such as bind-mounted config files, `env_file` inputs, or template fragments
 
-Each host must also declare the environments that are considered active in `apps.yaml` or `apps.yml`. During `build`, the actuator copies the entire environment directory into the output tree and then writes the normalized `docker-compose.yml` and merged `.env` used for deployment.
+Each host must also declare the environments that are considered active in `apps.yaml` or `apps.yml`. If both extensions exist for the same logical file, validation fails rather than guessing. During `build`, the actuator copies the entire environment directory into the output tree and then writes the normalized `docker-compose.yaml` and merged `.env` used for deployment.
 
 ## Typical operator workflow
 

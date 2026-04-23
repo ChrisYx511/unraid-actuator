@@ -47,8 +47,8 @@ def findings_for_discovered(
         "Environment must define exactly one supported source: one docker-compose "
         "file or one template descriptor paired with one values file."
         if code == "SOURCE_XOR"
-        else "Environment must define docker-compose.yml/docker-compose.yaml or "
-        "template.yml/template.yaml with matching values.yml/values.yaml."
+        else "Environment must define docker-compose.yaml/docker-compose.yml or "
+        "template.yaml/template.yml with matching values.yaml/values.yml."
     )
     return (
         ValidationFinding(

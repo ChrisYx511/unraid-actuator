@@ -21,8 +21,8 @@ def discover_host_tree(host_root: Path, declared: tuple[DeclaredEnvironment, ...
             compose_files = tuple(
                 candidate
                 for candidate in (
-                    environment_dir / "docker-compose.yml",
                     environment_dir / "docker-compose.yaml",
+                    environment_dir / "docker-compose.yml",
                 )
                 if candidate.is_file()
             )

@@ -101,7 +101,7 @@ def _write_marked_runtime_tree(tmp_path: Path, *targets: tuple[str, str]) -> Pat
     for app, environment in targets:
         target_dir = build_root / app / environment
         target_dir.mkdir(parents=True, exist_ok=True)
-        (target_dir / "docker-compose.yml").write_text("services: {}\n", encoding="utf-8")
+        (target_dir / "docker-compose.yaml").write_text("services: {}\n", encoding="utf-8")
         (target_dir / ".env").write_text("KEY=value\n", encoding="utf-8")
     return build_root
 

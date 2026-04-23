@@ -71,7 +71,7 @@ def test_teardown_dispatches_and_returns_one_on_failure(
             app="nextcloud",
             environment="production",
             output_dir=Path("/custom/build/nextcloud/production"),
-            compose_file=Path("/custom/build/nextcloud/production/docker-compose.yml"),
+            compose_file=Path("/custom/build/nextcloud/production/docker-compose.yaml"),
             env_file=Path("/custom/build/nextcloud/production/.env"),
         )
         return RuntimeActionResult(

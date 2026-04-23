@@ -4,6 +4,7 @@ from pathlib import Path
 from .build_models import BuildResult, BuildTarget
 from .build_paths import (
     BUILD_MARKER_NAME,
+    RUNTIME_COMPOSE_FILENAME,
     create_stage_root,
     promote_runtime_root,
     resolve_output_root,
@@ -111,7 +112,7 @@ def run_build_for_host(
             else:
                 raise ValueError(f"declared environment is not buildable: {target.app}/{target.environment}")
 
-            (output_dir / "docker-compose.yml").write_text(compose_text, encoding="utf-8")
+            (output_dir / RUNTIME_COMPOSE_FILENAME).write_text(compose_text, encoding="utf-8")
             env_text = materialize_env_file(
                 env_file=candidate.path / ".env",
                 secrets=extract_environment_secrets(

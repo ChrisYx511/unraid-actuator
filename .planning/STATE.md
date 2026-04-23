@@ -67,7 +67,7 @@ Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
 - [Phase 3]: Build output stays ephemeral and normalized, with merged secrets and an actuator-managed marker file.
-- [Phase 3]: Replace repo-executed `build.py` with declarative `template.yml` rendering from `values.yaml` only; keep secrets out of templates.
+- [Phase 3]: Replace repo-executed `build.py` with declarative `template.yaml` rendering from `values.yaml` only; keep secrets out of templates.
 - [Cross-phase]: YAML-backed actuator inputs should accept both `.yaml` and `.yml` extensions.
 - [Phase 5]: v1 reconcile success is defined by successful `docker compose up`, not container health gates.
 - [Phase 5]: Reconcile rebuilds the current runtime tree from the managed known-good checkout when removals need it and the current runtime tree is missing or malformed.

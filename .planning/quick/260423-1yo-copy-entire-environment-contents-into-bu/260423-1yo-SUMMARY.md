@@ -7,7 +7,7 @@
 ## Outcome
 
 - Updated build staging to copy each source environment directory into the runtime tree before generating actuator-managed outputs.
-- Preserved the existing runtime contract by still writing the normalized `docker-compose.yml` and materialized `.env` after the copy step.
+- Preserved the existing runtime contract by still writing the normalized `docker-compose.yaml` and materialized `.env` after the copy step.
 - Added build coverage for both static-compose and template-backed environments so copied auxiliary files survive into the built tree.
 
 ## Verification commands

@@ -130,7 +130,7 @@ def test_reconcile_rebuilds_current_runtime_before_teardown_and_stops_on_failure
         app="immich",
         environment="preview",
         output_dir=current_runtime_root / "immich" / "preview",
-        compose_file=current_runtime_root / "immich" / "preview" / "docker-compose.yml",
+        compose_file=current_runtime_root / "immich" / "preview" / "docker-compose.yaml",
         env_file=current_runtime_root / "immich" / "preview" / ".env",
     )
     build_calls: list[Path] = []
@@ -219,14 +219,14 @@ def test_reconcile_applies_candidate_logs_runtime_actions_and_fast_forwards_sour
         app="immich",
         environment="preview",
         output_dir=current_runtime_root / "immich" / "preview",
-        compose_file=current_runtime_root / "immich" / "preview" / "docker-compose.yml",
+        compose_file=current_runtime_root / "immich" / "preview" / "docker-compose.yaml",
         env_file=current_runtime_root / "immich" / "preview" / ".env",
     )
     desired_target = RuntimeTarget(
         app="nextcloud",
         environment="production",
         output_dir=workspace.build_root / "nextcloud" / "production",
-        compose_file=workspace.build_root / "nextcloud" / "production" / "docker-compose.yml",
+        compose_file=workspace.build_root / "nextcloud" / "production" / "docker-compose.yaml",
         env_file=workspace.build_root / "nextcloud" / "production" / ".env",
     )
     order: list[str] = []

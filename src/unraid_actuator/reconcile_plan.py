@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from .build_paths import RUNTIME_COMPOSE_FILENAME
 from .deploy_models import RuntimeTarget
 from .deploy_tree import require_marked_runtime_tree
 from .reconcile_models import RemovedTargetsPlan
@@ -57,7 +58,7 @@ def _load_removed_target(
     environment: str,
 ) -> RuntimeTarget:
     target_dir = build_root / app / environment
-    compose_file = target_dir / "docker-compose.yml"
+    compose_file = target_dir / RUNTIME_COMPOSE_FILENAME
     env_file = target_dir / ".env"
     if not target_dir.is_dir() or not compose_file.is_file() or not env_file.is_file():
         raise ValueError(f"runtime target is malformed: {app}/{environment}")

@@ -34,7 +34,7 @@ The running Docker Compose state for one Unraid host can be reconciled to Git sa
 
 ## Context
 
-The intended source repository layout is host-centric: each host directory contains `apps.yaml` or `apps.yml`, `secret-env.ejson`, and one or more app/environment directories containing either `docker-compose.yml`/`docker-compose.yaml` or a declarative `template.yaml`/`template.yml` paired with `values.yaml`/`values.yml`.
+The intended source repository layout is host-centric: each host directory contains `apps.yaml` or `apps.yml`, `secret-env.ejson`, and one or more app/environment directories containing either `docker-compose.yaml`/`docker-compose.yml` or a declarative `template.yaml`/`template.yml` paired with `values.yaml`/`values.yml`.
 
 This program is expected to run as a cron-driven utility on Unraid, where root storage is often ram-backed, persistent flash storage should avoid decrypted secret material, and operational tooling must work with standard platform constraints. The default build output under `/tmp/unraid-actuator/build` is aligned with that environment, and documentation strongly recommends ramfs-backed custom build paths when overridden.
 
@@ -56,7 +56,7 @@ The remaining follow-up work is intentionally non-blocking: real host verificati
 |----------|-----------|---------|
 | Repository layout is `[host]/[app]/[environment]/...` with host-root `apps.y[a]ml` and `secret-env.ejson` | The source of truth is organized around what each host should run, and reconciliation needs a predictable structure for discovery, build, and validation | Validated in Phases 2-6 |
 | Each environment may define either `docker-compose.y[a]ml` or declarative `template.y[a]ml` + `values.y[a]ml`, but never both | Prevents ambiguous build sources, removes repo-executed Python, and keeps template rendering deterministic | Validated in Phases 2-3 |
-| Build output normalizes every environment to `docker-compose.yml` plus merged `.env` files in a generated runtime tree | Deployment should consume one consistent shape regardless of whether the source was static Compose or template-rendered | Validated in Phases 3 and 6 |
+| Build output normalizes every environment to `docker-compose.yaml` plus merged `.env` files in a generated runtime tree | Deployment should consume one consistent shape regardless of whether the source was static Compose or template-rendered | Validated in Phases 3 and 6 |
 | Deploy and teardown operate only on marked actuator-built trees, with full-tree trust distinct from scoped current-host revalidation | Keeps direct runtime actions safe without blocking legitimate full-tree use of older marked outputs | Validated in Phase 4 |
 | Safety beats convenience for v1 | The primary value is safe reconciliation, so invalid declared configs fail early, build now validates before materializing secrets, and deploy/teardown stop on the first runtime error instead of trying to self-heal aggressively | Validated in Phases 2-6 |
 | The tool is single-host per installation | The operator may manage several servers, but each actuator instance should stay narrow and predictable | Validated in Phase 1 |

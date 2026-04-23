@@ -142,7 +142,7 @@ def compose_up_spec(output_dir, app: str, environment: str) -> CommandSpec:
             "-p", project_name,
             "--project-directory", str(output_dir),
             "--env-file", str(output_dir / ".env"),
-            "-f", str(output_dir / "docker-compose.yml"),
+            "-f", str(output_dir / "docker-compose.yaml"),
             "up", "-d",
         ),
         cwd=output_dir,
@@ -239,7 +239,7 @@ def compose_down_spec(output_dir, app: str, environment: str) -> CommandSpec:
             "-p", project_name,
             "--project-directory", str(output_dir),
             "--env-file", str(output_dir / ".env"),
-            "-f", str(output_dir / "docker-compose.yml"),
+            "-f", str(output_dir / "docker-compose.yaml"),
             "down",
         ),
         cwd=output_dir,
@@ -255,7 +255,7 @@ Source: Docker Compose official `down` docs + current `runner.py`
 |---|---|---|---|
 | Implicit project identity from cwd / file location | Explicit `-p` on every call | Current Docker docs | Prevents mismatched teardown |
 | Implicit `.env` and cwd resolution | Explicit `--env-file` and `--project-directory` | Current Docker docs | Makes build-tree execution deterministic |
-| Repo-executed `build.py` generation | Phase 3 normalized build tree from `template.yml` / static Compose | Phase 3 project decision | Phase 4 should consume build artifacts only |
+| Repo-executed `build.py` generation | Phase 3 normalized build tree from `template.yaml` / static Compose | Phase 3 project decision | Phase 4 should consume build artifacts only |
 | Live-Docker-only testing | Runner-based dry-run and recording tests | Phase 1 | Makes Phase 4 testable without Docker |
 
 **Deprecated/outdated:**

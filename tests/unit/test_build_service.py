@@ -46,7 +46,7 @@ def test_builds_all_to_default_tmp_path(tmp_path: Path, monkeypatch: pytest.Monk
         ("nextcloud", "production"),
     ]
     assert (default_root / ".UNRAID_RUNNING_CONFIGURATION").exists()
-    assert (default_root / "nextcloud" / "production" / "docker-compose.yml").exists()
+    assert (default_root / "nextcloud" / "production" / "docker-compose.yaml").exists()
     assert (default_root / "immich" / "preview" / ".env").read_text(
         encoding="utf-8"
     ) == "DB_PASSWORD=cipher\nIMAGE=wrong\n"
@@ -63,7 +63,7 @@ def test_build_copies_static_environment_contents_and_overwrites_runtime_outputs
     )
     _write_compose_env(host_root, "nextcloud", "production")
     env_root = host_root / "nextcloud" / "production"
-    (env_root / "docker-compose.yml").write_text("services:\n  app:\n    image: alpine\n", encoding="utf-8")
+    (env_root / "docker-compose.yaml").write_text("services:\n  app:\n    image: alpine\n", encoding="utf-8")
     (env_root / ".env").write_text("SOURCE=1\n", encoding="utf-8")
     (env_root / "config" / "prometheus.yml").parent.mkdir(parents=True, exist_ok=True)
     (env_root / "config" / "prometheus.yml").write_text("scrape_configs: []\n", encoding="utf-8")
@@ -82,7 +82,7 @@ def test_build_copies_static_environment_contents_and_overwrites_runtime_outputs
     output_dir = result.output_root / "nextcloud" / "production"
     assert (output_dir / "config" / "prometheus.yml").read_text(encoding="utf-8") == "scrape_configs: []\n"
     assert (output_dir / ".dockerignore").read_text(encoding="utf-8") == "tmp/\n"
-    assert (output_dir / "docker-compose.yml").read_text(encoding="utf-8") == (
+    assert (output_dir / "docker-compose.yaml").read_text(encoding="utf-8") == (
         "services:\n  app:\n    image: busybox\n"
     )
     assert (output_dir / ".env").read_text(encoding="utf-8") == "DB_PASSWORD=cipher\nSOURCE=1\n"
@@ -113,11 +113,11 @@ def test_build_copies_template_environment_sources_alongside_rendered_output(tmp
     result = run_build(runner=runner, config_path=config_path, output_root=tmp_path / "build")
 
     output_dir = result.output_root / "immich" / "preview"
-    assert (output_dir / "template.yml").read_text(encoding="utf-8").startswith("template:\n")
+    assert (output_dir / "template.yaml").read_text(encoding="utf-8").startswith("template:\n")
     assert (output_dir / "compose.yaml.j2").read_text(encoding="utf-8").startswith("services:\n")
-    assert (output_dir / "values.yml").read_text(encoding="utf-8") == "IMAGE: nginx:latest\n"
+    assert (output_dir / "values.yaml").read_text(encoding="utf-8") == "IMAGE: nginx:latest\n"
     assert (output_dir / "assets" / "redis.conf").read_text(encoding="utf-8") == "appendonly yes\n"
-    assert (output_dir / "docker-compose.yml").read_text(encoding="utf-8") == (
+    assert (output_dir / "docker-compose.yaml").read_text(encoding="utf-8") == (
         "services:\n  app:\n    image: nginx:latest\n"
     )
     assert (output_dir / ".env").read_text(encoding="utf-8") == "DB_PASSWORD=cipher\nIMAGE=wrong\n"
@@ -415,15 +415,15 @@ def _write_host_contracts(host_root: Path, *, apps_name: str, apps_text: str, se
 def _write_compose_env(host_root: Path, app: str, environment: str) -> None:
     target = host_root / app / environment
     target.mkdir(parents=True, exist_ok=True)
-    (target / "docker-compose.yml").write_text("services:\n  app:\n    image: busybox\n", encoding="utf-8")
+    (target / "docker-compose.yaml").write_text("services:\n  app:\n    image: busybox\n", encoding="utf-8")
 
 
 def _write_template_env(host_root: Path, app: str, environment: str) -> None:
     target = host_root / app / environment
     target.mkdir(parents=True, exist_ok=True)
-    (target / "template.yml").write_text("template:\n  include:\n    - compose.yaml.j2\n", encoding="utf-8")
+    (target / "template.yaml").write_text("template:\n  include:\n    - compose.yaml.j2\n", encoding="utf-8")
     (target / "compose.yaml.j2").write_text("services:\n  app:\n    image: {{ IMAGE }}\n", encoding="utf-8")
-    (target / "values.yml").write_text("IMAGE: nginx:latest\n", encoding="utf-8")
+    (target / "values.yaml").write_text("IMAGE: nginx:latest\n", encoding="utf-8")
     (target / ".env").write_text("IMAGE=wrong\n", encoding="utf-8")
 
 

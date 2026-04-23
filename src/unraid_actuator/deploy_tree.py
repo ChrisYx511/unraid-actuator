@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from .build_paths import BUILD_MARKER_NAME
+from .build_paths import BUILD_MARKER_NAME, RUNTIME_COMPOSE_FILENAME
 from .config import ACTIVE_CONFIG_PATH, load_active_config
 from .deploy_models import RuntimeTarget
 from .schemas import load_declared_environments
@@ -79,7 +79,7 @@ def _load_runtime_targets(build_root: Path) -> dict[tuple[str, str], RuntimeTarg
 
 
 def _load_runtime_target(target_dir: Path, *, app: str, environment: str) -> RuntimeTarget:
-    compose_file = target_dir / "docker-compose.yml"
+    compose_file = target_dir / RUNTIME_COMPOSE_FILENAME
     env_file = target_dir / ".env"
     if not compose_file.is_file() or not env_file.is_file():
         raise ValueError(f"runtime target is malformed: {app}/{environment}")

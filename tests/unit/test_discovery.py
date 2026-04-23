@@ -51,12 +51,20 @@ def test_source_classification_covers_missing_and_ambiguous_inputs(
         encoding="utf-8",
     )
     (host_root / "duplicate-template" / "prod" / "values.yml").write_text("image: busybox\n", encoding="utf-8")
+    (host_root / "duplicate-compose" / "prod").mkdir(parents=True)
+    (host_root / "duplicate-compose" / "prod" / "docker-compose.yaml").write_text(
+        "services: {}\n", encoding="utf-8"
+    )
+    (host_root / "duplicate-compose" / "prod" / "docker-compose.yml").write_text(
+        "services: {}\n", encoding="utf-8"
+    )
 
     discovered = discover_host_tree(host_root, ())
 
     kinds = {(item.app, item.environment): item.source_kind for item in discovered}
     assert kinds[("missing", "prod")] == SourceKind.MISSING
     assert kinds[("ambiguous", "prod")] == SourceKind.AMBIGUOUS
+    assert kinds[("duplicate-compose", "prod")] == SourceKind.AMBIGUOUS
     assert kinds[("duplicate-template", "prod")] == SourceKind.AMBIGUOUS
 
 

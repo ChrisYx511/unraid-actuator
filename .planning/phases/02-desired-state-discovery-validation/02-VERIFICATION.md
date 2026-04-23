@@ -5,7 +5,7 @@ status: human_needed
 score: 4/4 must-haves verified
 human_verification:
   - test: "Run `unraid-actuator validate` on a Docker-equipped host against one static Compose environment and one `build.py` environment."
-    expected: "Static `docker-compose.yml` and stdin-fed `build.py` output both pass through real `docker compose config -q`, grouped output is printed once, warnings-only exits 0, and hard errors exit 1."
+    expected: "Static `docker-compose.yaml` and stdin-fed `build.py` output both pass through real `docker compose config -q`, grouped output is printed once, warnings-only exits 0, and hard errors exit 1."
     why_human: "Live Docker Compose integration is an external runtime dependency and is not available in this verification environment."
 ---
 

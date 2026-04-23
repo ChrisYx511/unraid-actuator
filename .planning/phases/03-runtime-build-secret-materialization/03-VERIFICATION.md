@@ -51,7 +51,7 @@ reverified_in: 06-build-safety-verification-recovery
 | `BLD-01` | Build all current host app/environment configurations into `/tmp/unraid-actuator/build` by default | ✓ SATISFIED | `src/unraid_actuator/build_paths.py` defines the default root and `src/unraid_actuator/build.py` builds declared targets into that managed runtime tree. |
 | `BLD-02` | Build into a custom output path only when it is empty before build starts | ✓ SATISFIED | `validate_output_root(...)` accepts only missing/empty custom roots. Covered by `tests/unit/test_build_paths.py` and exercised through `tests/unit/test_build_service.py`. |
 | `BLD-03` | Safe failure when a non-default build output path is non-empty | ✓ SATISFIED | Custom non-empty roots fail before staging/build work. Covered by `tests/unit/test_build_paths.py`. |
-| `BLD-04` | Normalized `docker-compose.yml` for every built environment | ✓ SATISFIED | `normalize_static_compose(...)` and `normalize_rendered_compose(...)` canonicalize both source kinds before write. |
+| `BLD-04` | Normalized `docker-compose.yaml` for every built environment | ✓ SATISFIED | `normalize_static_compose(...)` and `normalize_rendered_compose(...)` canonicalize both source kinds before write. |
 | `BLD-05` | Merged `.env` output combining decrypted secrets and non-secret env data | ✓ SATISFIED | `materialize_env_file(...)` merges base env values with secret override precedence and writes deterministic output per built environment. |
 | `BLD-06` | Build failure when required secret decryption cannot complete | ✓ SATISFIED | `decrypt_secret_env(...)` raises on decrypt failure or malformed JSON, and the build service preserves the prior final tree on failure. |
 | `BLD-07` | Build root marker file `.UNRAID_RUNNING_CONFIGURATION` on each successful tree | ✓ SATISFIED | `src/unraid_actuator/build.py` writes the marker into the staged root immediately before promotion. |
@@ -65,7 +65,7 @@ Phase 6 additionally closed the later-discovered `validate -> build` wiring gap 
 These checks remain recommended on a real Docker/EJSON-equipped Unraid host because they are outside this in-repo verification scope:
 
 1. **Real Compose normalization**
-   - Run `unraid-actuator build` against one static environment and one template-driven environment on a Docker host and confirm the generated `docker-compose.yml` files are canonical and uninterpolated.
+   - Run `unraid-actuator build` against one static environment and one template-driven environment on a Docker host and confirm the generated `docker-compose.yaml` files are canonical and uninterpolated.
 2. **Real EJSON decrypt compatibility**
    - Run `unraid-actuator build` on a host with valid EJSON key material and confirm secret-bearing environments emit the expected merged `.env`.
 
