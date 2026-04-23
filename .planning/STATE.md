@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Initial Release
 status: Planning next milestone
-stopped_at: Quick task 260422-xbd completed
-last_updated: "2026-04-23T03:59:14Z"
-last_activity: 2026-04-23 -- Completed quick task 260422-xbd to remove redundant future-annotation imports and modernize deprecated typing aliases
+stopped_at: Quick task 260423-1hi completed
+last_updated: "2026-04-23T05:06:05Z"
+last_activity: 2026-04-23 -- Completed quick task 260423-1hi to add Unraid boot/install bootstrap scripts and an actuator initialization template
 progress:
   total_phases: 7
   completed_phases: 7
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-23)
 Phase: Milestone archived (v1.0 complete)
 Plan: No active phase plans
 Status: Planning next milestone
-Last activity: 2026-04-23 -- Completed quick task 260422-xbd to remove redundant future-annotation imports and modernize deprecated typing aliases
+Last activity: 2026-04-23 -- Completed quick task 260423-1hi to add Unraid boot/install bootstrap scripts and an actuator initialization template
 
 Progress: [██████████] 100%
 
@@ -89,9 +89,10 @@ None.
 |---|-------------|------|--------|-----------|
 | 260422-wz0 | Add ruff linting and formatting plus strict basedpyright and fix practical typing errors | 2026-04-23 | 1789589 | [260422-wz0-add-ruff-linting-and-formatting-plus-str](./quick/260422-wz0-add-ruff-linting-and-formatting-plus-str/) |
 | 260422-xbd | Remove __future__ annotations imports and replace deprecated typing imports with modern Python 3.13 equivalents | 2026-04-23 | a6054a1 | [260422-xbd-remove-future-annotations-imports-and-re](./quick/260422-xbd-remove-future-annotations-imports-and-re/) |
+| 260423-1hi | Add Unraid boot install and actuator init scripts | 2026-04-23 | 1185b1b | [260423-1hi-add-unraid-boot-install-and-actuator-ini](./quick/260423-1hi-add-unraid-boot-install-and-actuator-ini/) |
 
 ## Session Continuity
 
-Last session: 2026-04-23T03:59:14Z
-Stopped at: Quick task 260422-xbd completed
-Resume file: .planning/quick/260422-xbd-remove-future-annotations-imports-and-re/260422-xbd-SUMMARY.md
+Last session: 2026-04-23T05:06:05Z
+Stopped at: Quick task 260423-1hi completed
+Resume file: .planning/quick/260423-1hi-add-unraid-boot-install-and-actuator-ini/260423-1hi-SUMMARY.md
