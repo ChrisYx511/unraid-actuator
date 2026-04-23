@@ -4,11 +4,16 @@ from pathlib import Path
 
 import pytest
 
-from unraid_actuator.compose_build import normalize_rendered_compose, normalize_static_compose
+from unraid_actuator.compose_build import (
+    normalize_rendered_compose,
+    normalize_static_compose,
+)
 from unraid_actuator.runner import CommandResult, RecordingRunner
 
 
-def test_normalize_static_compose_uses_no_interpolate_and_scrubbed_env(tmp_path: Path) -> None:
+def test_normalize_static_compose_uses_no_interpolate_and_scrubbed_env(
+    tmp_path: Path,
+) -> None:
     env_root = tmp_path / "nextcloud" / "production"
     env_root.mkdir(parents=True)
     compose_file = env_root / "docker-compose.yml"

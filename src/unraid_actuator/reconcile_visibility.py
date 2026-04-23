@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from contextlib import AbstractContextManager
-from datetime import datetime, timezone
-from pathlib import Path
 import shutil
-from typing import Callable, TextIO
+from collections.abc import Callable
+from contextlib import AbstractContextManager
+from datetime import UTC, datetime
+from pathlib import Path
+from types import TracebackType
+from typing import TextIO
 
 from .runner import CommandResult, CommandRunner, CommandSpec, format_command
 
@@ -25,7 +27,12 @@ class ReconcileVisibility(AbstractContextManager["ReconcileVisibility"]):
         self.log_path = log_path
         self._notify_resolver = notify_resolver
 
-    def __exit__(self, exc_type, exc, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         self._file_handle.close()
         return None
 
@@ -67,9 +74,19 @@ class ReconcileVisibility(AbstractContextManager["ReconcileVisibility"]):
             f"  exit_code={result.exit_code} executed={result.executed}",
         ]
         if include_output and result.stdout:
-            lines.extend(("  stdout:", *[f"    {line}" for line in result.stdout.rstrip().splitlines()]))
+            lines.extend(
+                (
+                    "  stdout:",
+                    *[f"    {line}" for line in result.stdout.rstrip().splitlines()],
+                )
+            )
         if include_output and result.stderr:
-            lines.extend(("  stderr:", *[f"    {line}" for line in result.stderr.rstrip().splitlines()]))
+            lines.extend(
+                (
+                    "  stderr:",
+                    *[f"    {line}" for line in result.stderr.rstrip().splitlines()],
+                )
+            )
         self._write_lines(*lines)
 
     def _emit_syslog(self, message: str) -> None:
@@ -99,7 +116,7 @@ class ReconcileVisibility(AbstractContextManager["ReconcileVisibility"]):
         )
 
     def _write_lines(self, *lines: str) -> None:
-        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        timestamp = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
         for line in lines:
             _ = self._file_handle.write(f"[{timestamp}] {line}\n")
         self._file_handle.flush()
@@ -125,7 +142,7 @@ def open_reconcile_log(
 
 
 def _default_log_timestamp() -> str:
-    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
 
 
 __all__ = ["DEFAULT_RECONCILE_LOG_DIR", "ReconcileVisibility", "open_reconcile_log"]

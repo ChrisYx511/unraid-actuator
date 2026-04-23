@@ -26,7 +26,9 @@ def test_inspect_managed_checkout_rejects_dirty_checkout(tmp_path: Path) -> None
     assert runner.calls[0].argv == ("git", "status", "--porcelain=v2", "--branch")
 
 
-def test_inspect_managed_checkout_rejects_locally_diverged_source(tmp_path: Path) -> None:
+def test_inspect_managed_checkout_rejects_locally_diverged_source(
+    tmp_path: Path,
+) -> None:
     config_path = _write_active_config(tmp_path)
     source_path = tmp_path / "source"
     source_path.mkdir(parents=True, exist_ok=True)
@@ -43,7 +45,13 @@ def test_inspect_managed_checkout_rejects_locally_diverged_source(tmp_path: Path
     with pytest.raises(ValueError, match="not a clean fast-forward ancestor"):
         inspect_managed_checkout(runner=runner, config_path=config_path)
 
-    assert runner.calls[-1].argv == ("git", "merge-base", "--is-ancestor", "HEAD", "FETCH_HEAD")
+    assert runner.calls[-1].argv == (
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "HEAD",
+        "FETCH_HEAD",
+    )
 
 
 def test_inspect_managed_checkout_resolves_exact_candidate_sha(tmp_path: Path) -> None:
@@ -68,7 +76,9 @@ def test_inspect_managed_checkout_resolves_exact_candidate_sha(tmp_path: Path) -
     assert state.branch == "deploy"
 
 
-def test_prepare_candidate_checkout_and_fast_forward_use_exact_candidate_sha(tmp_path: Path) -> None:
+def test_prepare_candidate_checkout_and_fast_forward_use_exact_candidate_sha(
+    tmp_path: Path,
+) -> None:
     config_path = _write_active_config(tmp_path)
     managed_state = ManagedCheckoutState(
         current_sha="abc123",

@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from collections.abc import Sequence
 from pathlib import Path
-import sys
 
 from .build import run_build
 from .config import ACTIVE_CONFIG_PATH, ActiveConfig
 from .deploy import run_deploy, run_teardown
+from .deploy_models import RuntimeActionResult
 from .init import InitResult, run_init
 from .reconcile import run_reconcile
+from .reconcile_models import ReconcileResult
 from .report import render_validation_report
 from .runner import CommandRunner, DryRunRunner, SubprocessRunner
 from .schemas import YAMLValidationError
@@ -107,7 +109,9 @@ def build_parser() -> argparse.ArgumentParser:
     reconcile_parser = subparsers.add_parser(
         "reconcile",
         help="Reconcile the configured deploy branch into the running host state.",
-        description="Fetch, validate, build, and apply the configured deploy branch with explicit reconcile dry-run semantics.",
+        description=(
+            "Fetch, validate, build, and apply the configured deploy branch with explicit reconcile dry-run semantics."
+        ),
     )
     reconcile_parser.add_argument(
         "--dry-run",
@@ -136,7 +140,12 @@ def main(
             source_path=Path(args.source_path),
         )
         selected_runner = runner or _resolve_runner(args.dry_run)
-        result = run_init(config, runner=selected_runner, dry_run=args.dry_run, config_path=config_path)
+        result = run_init(
+            config,
+            runner=selected_runner,
+            dry_run=args.dry_run,
+            config_path=config_path,
+        )
         print(_format_init_result(result))
         return 0
 
@@ -243,11 +252,11 @@ def _format_init_result(result: InitResult) -> str:
     return f"Initialized source tree at {result.config.source_path}"
 
 
-def _format_runtime_action(prefix: str, result) -> str:
+def _format_runtime_action(prefix: str, result: RuntimeActionResult) -> str:
     return f"{prefix} {len(result.targets)} target(s) from {result.build_root}"
 
 
-def _format_reconcile_result(result) -> str:
+def _format_reconcile_result(result: ReconcileResult) -> str:
     parts = [f"Reconcile {result.status}"]
     if result.candidate_sha:
         parts.append(f"candidate={result.candidate_sha}")

@@ -11,7 +11,12 @@ def render_validation_report(report: ValidationReport, *, hostname: str) -> str:
     lines.extend(
         [
             "",
-            f"Summary: checked={len(report.checked_targets)} errors={report.error_count} warnings={report.warning_count}",
+            (
+                "Summary: "
+                f"checked={len(report.checked_targets)} "
+                f"errors={report.error_count} "
+                f"warnings={report.warning_count}"
+            ),
         ]
     )
     return "\n".join(lines)

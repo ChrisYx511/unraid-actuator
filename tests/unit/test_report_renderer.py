@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 from unraid_actuator.report import render_validation_report
-from unraid_actuator.validation_models import DeclaredEnvironment, FindingSeverity, ValidationFinding, ValidationReport
+from unraid_actuator.validation_models import (
+    DeclaredEnvironment,
+    FindingSeverity,
+    ValidationFinding,
+    ValidationReport,
+)
 
 
 def test_report_renderer_groups_sections_even_when_one_is_empty() -> None:

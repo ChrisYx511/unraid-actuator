@@ -35,7 +35,10 @@ def test_teardown_full_is_ordered_and_fail_fast(tmp_path: Path) -> None:
         run_teardown(runner=runner, config_path=config_path, build_root=build_root)
 
     assert [call.argv[-1] for call in runner.calls] == ["down", "down"]
-    assert [call.argv[3] for call in runner.calls] == ["nextcloud-production", "immich-preview"]
+    assert [call.argv[3] for call in runner.calls] == [
+        "nextcloud-production",
+        "immich-preview",
+    ]
 
 
 def test_teardown_scoped_requires_current_host_valid_target(tmp_path: Path) -> None:

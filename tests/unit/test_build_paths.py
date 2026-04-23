@@ -4,7 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from unraid_actuator.build_paths import BUILD_MARKER_NAME, DEFAULT_BUILD_ROOT, create_stage_root, resolve_output_root, validate_output_root
+from unraid_actuator.build_paths import (
+    BUILD_MARKER_NAME,
+    DEFAULT_BUILD_ROOT,
+    create_stage_root,
+    resolve_output_root,
+    validate_output_root,
+)
 
 
 def test_default_build_root_resolves_to_tmp_path() -> None:

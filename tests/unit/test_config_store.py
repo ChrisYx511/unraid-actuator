@@ -4,7 +4,12 @@ from pathlib import Path
 
 import pytest
 
-from unraid_actuator.config import ActiveConfig, YAMLValidationError, load_active_config, save_active_config
+from unraid_actuator.config import (
+    ActiveConfig,
+    YAMLValidationError,
+    load_active_config,
+    save_active_config,
+)
 
 
 def test_save_and_load_active_config_round_trip(tmp_path: Path) -> None:

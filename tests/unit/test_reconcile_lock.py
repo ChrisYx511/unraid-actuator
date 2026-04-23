@@ -27,7 +27,9 @@ def test_lock_releases_after_exception(tmp_path: Path) -> None:
         assert lock_path.read_text(encoding="utf-8").startswith("pid=")
 
 
-def test_same_lock_helper_serializes_dry_run_and_live_reconcile_calls(tmp_path: Path) -> None:
+def test_same_lock_helper_serializes_dry_run_and_live_reconcile_calls(
+    tmp_path: Path,
+) -> None:
     lock_path = tmp_path / "reconcile.lock"
 
     with acquire_reconcile_lock(lock_path):

@@ -16,14 +16,8 @@ def plan_removed_targets(
     current_runtime_root: Path,
 ) -> RemovedTargetsPlan:
     current_declared = load_declared_environments(current_host_root)
-    incoming_keys = {
-        (target.app, target.environment) for target in load_declared_environments(incoming_host_root)
-    }
-    removed = tuple(
-        target
-        for target in current_declared
-        if (target.app, target.environment) not in incoming_keys
-    )
+    incoming_keys = {(target.app, target.environment) for target in load_declared_environments(incoming_host_root)}
+    removed = tuple(target for target in current_declared if (target.app, target.environment) not in incoming_keys)
     if not removed:
         return RemovedTargetsPlan(
             removed_declarations=(),

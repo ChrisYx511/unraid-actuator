@@ -1,18 +1,23 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from pathlib import Path
 import os
 import shlex
 import subprocess
-from typing import Mapping, Protocol
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Protocol
+
+
+def _empty_env() -> dict[str, str]:
+    return {}
 
 
 @dataclass(frozen=True)
 class CommandSpec:
     argv: tuple[str, ...]
     cwd: Path | None = None
-    env: Mapping[str, str] = field(default_factory=dict)
+    env: Mapping[str, str] = field(default_factory=_empty_env)
     stdin_text: str | None = None
     inherit_env: bool = True
 

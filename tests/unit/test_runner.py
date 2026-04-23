@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from unraid_actuator.runner import CommandSpec, DryRunRunner, RecordingRunner, format_command
+from unraid_actuator.runner import (
+    CommandSpec,
+    DryRunRunner,
+    RecordingRunner,
+    format_command,
+)
 
 
 def test_dry_run_runner_returns_non_executed_result(sample_command_spec) -> None:

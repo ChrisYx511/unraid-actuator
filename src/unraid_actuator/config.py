@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any, TypedDict, cast
 
-from strictyaml import Map, Str, YAMLValidationError, as_document, load
+import strictyaml
+from strictyaml import Map, Str, YAMLValidationError
 
 ACTIVE_CONFIG_PATH = Path("/tmp/actuator-cfg.yml")
 ACTIVE_CONFIG_SCHEMA = Map(
@@ -14,6 +16,15 @@ ACTIVE_CONFIG_SCHEMA = Map(
         "source_path": Str(),
     }
 )
+STRICT_AS_DOCUMENT = cast(Any, strictyaml.as_document)
+STRICT_LOAD = cast(Any, strictyaml.load)
+
+
+class ActiveConfigData(TypedDict):
+    repo_url: str
+    deploy_branch: str
+    hostname: str
+    source_path: str
 
 
 @dataclass(frozen=True)
@@ -26,7 +37,7 @@ class ActiveConfig:
 
 def save_active_config(config: ActiveConfig, *, path: Path = ACTIVE_CONFIG_PATH) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    document = as_document(
+    document = STRICT_AS_DOCUMENT(
         {
             "repo_url": config.repo_url,
             "deploy_branch": config.deploy_branch,
@@ -39,8 +50,8 @@ def save_active_config(config: ActiveConfig, *, path: Path = ACTIVE_CONFIG_PATH)
 
 
 def load_active_config(*, path: Path = ACTIVE_CONFIG_PATH) -> ActiveConfig:
-    document = load(path.read_text(encoding="utf-8"), ACTIVE_CONFIG_SCHEMA)
-    data = document.data
+    document = STRICT_LOAD(path.read_text(encoding="utf-8"), ACTIVE_CONFIG_SCHEMA)
+    data = cast(ActiveConfigData, document.data)
     return ActiveConfig(
         repo_url=data["repo_url"],
         deploy_branch=data["deploy_branch"],

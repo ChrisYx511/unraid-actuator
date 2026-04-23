@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from .compose_build import normalize_rendered_compose, normalize_static_compose
+from .runner import CommandRunner
 from .template_render import render_template_environment
 from .validation_models import DiscoveredEnvironment, FindingSeverity, ValidationFinding
-from .runner import CommandRunner
 
 
 def validate_static_compose(
@@ -42,7 +42,13 @@ def validate_template_source(
         return (_command_failure(candidate, "TEMPLATE_RENDER_FAILED", str(exc)),)
 
     if not rendered.strip():
-        return (_command_failure(candidate, "TEMPLATE_OUTPUT_EMPTY", "template rendering produced no Compose YAML output."),)
+        return (
+            _command_failure(
+                candidate,
+                "TEMPLATE_OUTPUT_EMPTY",
+                "template rendering produced no Compose YAML output.",
+            ),
+        )
 
     try:
         normalize_rendered_compose(

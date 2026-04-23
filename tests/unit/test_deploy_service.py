@@ -40,7 +40,10 @@ def test_deploy_full_is_ordered_and_fail_fast(
         run_deploy(runner=runner, config_path=config_path)
 
     assert [call.argv[-2:] for call in runner.calls] == [("up", "-d"), ("up", "-d")]
-    assert [call.argv[3] for call in runner.calls] == ["nextcloud-production", "immich-preview"]
+    assert [call.argv[3] for call in runner.calls] == [
+        "nextcloud-production",
+        "immich-preview",
+    ]
 
 
 def test_deploy_scoped_requires_current_host_valid_target(tmp_path: Path) -> None:

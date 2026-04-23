@@ -8,7 +8,12 @@ from unraid_actuator import build_paths
 from unraid_actuator.build import run_build, run_build_for_host
 from unraid_actuator.config import ActiveConfig, save_active_config
 from unraid_actuator.runner import CommandResult, RecordingRunner
-from unraid_actuator.validation_models import DeclaredEnvironment, FindingSeverity, ValidationFinding, ValidationReport
+from unraid_actuator.validation_models import (
+    DeclaredEnvironment,
+    FindingSeverity,
+    ValidationFinding,
+    ValidationReport,
+)
 
 
 def test_builds_all_to_default_tmp_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -44,10 +49,14 @@ def test_builds_all_to_default_tmp_path(tmp_path: Path, monkeypatch: pytest.Monk
     ]
     assert (default_root / ".UNRAID_RUNNING_CONFIGURATION").exists()
     assert (default_root / "nextcloud" / "production" / "docker-compose.yml").exists()
-    assert (default_root / "immich" / "preview" / ".env").read_text(encoding="utf-8") == "DB_PASSWORD=cipher\nIMAGE=wrong\n"
+    assert (default_root / "immich" / "preview" / ".env").read_text(
+        encoding="utf-8"
+    ) == "DB_PASSWORD=cipher\nIMAGE=wrong\n"
 
 
-def test_build_fails_before_decrypt_for_missing_or_ambiguous_declared_targets(tmp_path: Path) -> None:
+def test_build_fails_before_decrypt_for_missing_or_ambiguous_declared_targets(
+    tmp_path: Path,
+) -> None:
     config_path = _write_active_config(tmp_path)
     host_root = tmp_path / "source" / "PotatoServer"
     _write_host_contracts(
@@ -60,7 +69,10 @@ def test_build_fails_before_decrypt_for_missing_or_ambiguous_declared_targets(tm
 
     runner = RecordingRunner(executed=True)
 
-    with pytest.raises(ValueError, match=r"build blocked by validation errors: postgres/production \(DECLARED_MISSING\)"):
+    with pytest.raises(
+        ValueError,
+        match=r"build blocked by validation errors: postgres/production \(DECLARED_MISSING\)",
+    ):
         run_build(runner=runner, config_path=config_path, output_root=tmp_path / "build")
 
     assert all(call.argv[0] != "ejson" for call in runner.calls)
@@ -93,7 +105,7 @@ def test_failed_decrypt_leaves_previous_output_root_untouched(tmp_path: Path, mo
                 stdout="",
                 stderr="decrypt failed",
                 executed=True,
-            )
+            ),
         ],
         executed=True,
     )
@@ -146,9 +158,7 @@ def test_run_build_for_host_matches_wrapper_behavior(tmp_path: Path) -> None:
     assert [(target.app, target.environment) for target in wrapper_result.built_targets] == [
         ("nextcloud", "production")
     ]
-    assert [(target.app, target.environment) for target in direct_result.built_targets] == [
-        ("nextcloud", "production")
-    ]
+    assert [(target.app, target.environment) for target in direct_result.built_targets] == [("nextcloud", "production")]
     assert (wrapper_result.output_root / "nextcloud" / "production" / ".env").read_text(encoding="utf-8") == (
         direct_result.output_root / "nextcloud" / "production" / ".env"
     ).read_text(encoding="utf-8")
@@ -184,11 +194,21 @@ def test_build_runs_validation_before_output_root_and_decrypt(
     )
     _write_compose_env(host_root, "nextcloud", "production")
     calls: list[str] = []
-    runner = RecordingRunner(results=[_result(stdout='{"_public_key":"' + ("a" * 64) + '","nextcloud":{"production":{"DB_PASSWORD":"cipher"}}}'), _result(stdout="services:\n  app:\n    image: busybox\n")], executed=True)
+    runner = RecordingRunner(
+        results=[
+            _result(stdout='{"_public_key":"' + ("a" * 64) + '","nextcloud":{"production":{"DB_PASSWORD":"cipher"}}}'),
+            _result(stdout="services:\n  app:\n    image: busybox\n"),
+        ],
+        executed=True,
+    )
 
     monkeypatch.setattr(
         "unraid_actuator.build.run_validate_for_host",
-        lambda **_: calls.append("validate") or ValidationReport(findings=(), checked_targets=(DeclaredEnvironment(app="nextcloud", environment="production"),)),
+        lambda **_: calls.append("validate")
+        or ValidationReport(
+            findings=(),
+            checked_targets=(DeclaredEnvironment(app="nextcloud", environment="production"),),
+        ),
     )
     monkeypatch.setattr(
         "unraid_actuator.build.validate_output_root",
@@ -200,7 +220,11 @@ def test_build_runs_validation_before_output_root_and_decrypt(
     )
     monkeypatch.setattr(
         "unraid_actuator.build.decrypt_secret_env",
-        lambda **_: calls.append("decrypt") or {"_public_key": "a" * 64, "nextcloud": {"production": {"DB_PASSWORD": "cipher"}}},
+        lambda **_: calls.append("decrypt")
+        or {
+            "_public_key": "a" * 64,
+            "nextcloud": {"production": {"DB_PASSWORD": "cipher"}},
+        },
     )
 
     run_build(runner=runner, config_path=config_path, output_root=tmp_path / "build")
@@ -250,7 +274,10 @@ def test_build_validation_errors_block_before_stage_or_decrypt(
         lambda **_: (_ for _ in ()).throw(AssertionError("decrypt_secret_env should not run")),
     )
 
-    with pytest.raises(ValueError, match=r"build blocked by validation errors: nextcloud/production \(DECLARED_MISSING\)"):
+    with pytest.raises(
+        ValueError,
+        match=r"build blocked by validation errors: nextcloud/production \(DECLARED_MISSING\)",
+    ):
         run_build_for_host(runner=runner, host_root=host_root, output_root=tmp_path / "build")
 
 

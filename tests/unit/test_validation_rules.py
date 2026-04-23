@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from unraid_actuator.validation_models import DeclaredEnvironment, DiscoveredEnvironment, FindingSeverity, SourceKind
+from unraid_actuator.validation_models import (
+    DeclaredEnvironment,
+    DiscoveredEnvironment,
+    FindingSeverity,
+    SourceKind,
+)
 from unraid_actuator.validation_rules import (
     compose_project_name,
     findings_for_discovered,

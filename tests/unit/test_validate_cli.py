@@ -6,7 +6,12 @@ import pytest
 
 from unraid_actuator.cli import main
 from unraid_actuator.config import ActiveConfig, save_active_config
-from unraid_actuator.validation_models import DeclaredEnvironment, FindingSeverity, ValidationFinding, ValidationReport
+from unraid_actuator.validation_models import (
+    DeclaredEnvironment,
+    FindingSeverity,
+    ValidationFinding,
+    ValidationReport,
+)
 
 
 def test_validate_requires_both_scope_flags(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -19,7 +24,9 @@ def test_validate_requires_both_scope_flags(tmp_path: Path, capsys: pytest.Captu
     assert "--app and --environment must be provided together" in capsys.readouterr().err
 
 
-def test_validate_warnings_only_returns_zero(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_validate_warnings_only_returns_zero(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     config_path = _write_active_config(tmp_path)
     report = ValidationReport(
         findings=(
@@ -41,7 +48,9 @@ def test_validate_warnings_only_returns_zero(monkeypatch: pytest.MonkeyPatch, tm
     assert "Warnings (1)" in capsys.readouterr().out
 
 
-def test_validate_hard_error_returns_one(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_validate_hard_error_returns_one(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     config_path = _write_active_config(tmp_path)
     report = ValidationReport(
         findings=(

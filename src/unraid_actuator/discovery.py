@@ -12,8 +12,14 @@ def discover_host_tree(host_root: Path, declared: tuple[DeclaredEnvironment, ...
     if not host_root.exists():
         return ()
 
-    for app_dir in sorted((path for path in host_root.iterdir() if path.is_dir()), key=lambda path: path.name):
-        for environment_dir in sorted((path for path in app_dir.iterdir() if path.is_dir()), key=lambda path: path.name):
+    for app_dir in sorted(
+        (path for path in host_root.iterdir() if path.is_dir()),
+        key=lambda path: path.name,
+    ):
+        for environment_dir in sorted(
+            (path for path in app_dir.iterdir() if path.is_dir()),
+            key=lambda path: path.name,
+        ):
             compose_files = tuple(
                 candidate
                 for candidate in (
@@ -58,11 +64,7 @@ def find_missing_declared_environments(
     host_root: Path,
     declared: tuple[DeclaredEnvironment, ...],
 ) -> tuple[DeclaredEnvironment, ...]:
-    missing = [
-        target
-        for target in declared
-        if not (host_root / target.app / target.environment).is_dir()
-    ]
+    missing = [target for target in declared if not (host_root / target.app / target.environment).is_dir()]
     return tuple(missing)
 
 

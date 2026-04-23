@@ -9,7 +9,9 @@ from unraid_actuator.config import load_active_config
 from unraid_actuator.runner import RecordingRunner
 
 
-def test_init_creates_missing_directories_runs_clone_and_persists_config(tmp_path: Path) -> None:
+def test_init_creates_missing_directories_runs_clone_and_persists_config(
+    tmp_path: Path,
+) -> None:
     source_path = tmp_path / "managed" / "source"
     config_path = tmp_path / "actuator-cfg.yml"
     runner = RecordingRunner(executed=True)

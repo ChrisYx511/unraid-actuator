@@ -16,7 +16,12 @@ from unraid_actuator.reconcile_models import (
     RemovedTargetsPlan,
 )
 from unraid_actuator.runner import CommandResult, RecordingRunner
-from unraid_actuator.validation_models import DeclaredEnvironment, FindingSeverity, ValidationFinding, ValidationReport
+from unraid_actuator.validation_models import (
+    DeclaredEnvironment,
+    FindingSeverity,
+    ValidationFinding,
+    ValidationReport,
+)
 
 
 def test_reconcile_noop_returns_success_without_mutation(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
@@ -57,7 +62,10 @@ def test_reconcile_invalid_candidate_fails_before_removal_or_apply(
     calls: list[str] = []
     monkeypatch.setattr("unraid_actuator.reconcile.acquire_reconcile_lock", lambda: _fake_lock())
     monkeypatch.setattr("unraid_actuator.reconcile.open_reconcile_log", lambda **_: visibility)
-    monkeypatch.setattr("unraid_actuator.reconcile.resolve_output_root", lambda _: tmp_path / "current-build")
+    monkeypatch.setattr(
+        "unraid_actuator.reconcile.resolve_output_root",
+        lambda _: tmp_path / "current-build",
+    )
     monkeypatch.setattr(
         "unraid_actuator.reconcile.inspect_managed_checkout",
         lambda **_: ManagedCheckoutState(
@@ -89,8 +97,14 @@ def test_reconcile_invalid_candidate_fails_before_removal_or_apply(
             checked_targets=(),
         ),
     )
-    monkeypatch.setattr("unraid_actuator.reconcile.run_build_for_host", lambda **_: calls.append("build"))
-    monkeypatch.setattr("unraid_actuator.reconcile.plan_removed_targets", lambda **_: calls.append("plan"))
+    monkeypatch.setattr(
+        "unraid_actuator.reconcile.run_build_for_host",
+        lambda **_: calls.append("build"),
+    )
+    monkeypatch.setattr(
+        "unraid_actuator.reconcile.plan_removed_targets",
+        lambda **_: calls.append("plan"),
+    )
 
     with pytest.raises(ValueError, match="incoming candidate validation failed"):
         run_reconcile(runner=RecordingRunner(), config_path=config_path)
@@ -166,8 +180,14 @@ def test_reconcile_rebuilds_current_runtime_before_teardown_and_stops_on_failure
         "unraid_actuator.reconcile.run_teardown",
         lambda **_: (_ for _ in ()).throw(ValueError("teardown failed for immich/preview: broke")),
     )
-    monkeypatch.setattr("unraid_actuator.reconcile.run_deploy", lambda **_: deploy_calls.append("deploy"))
-    monkeypatch.setattr("unraid_actuator.reconcile.promote_runtime_root", lambda *_: deploy_calls.append("promote"))
+    monkeypatch.setattr(
+        "unraid_actuator.reconcile.run_deploy",
+        lambda **_: deploy_calls.append("deploy"),
+    )
+    monkeypatch.setattr(
+        "unraid_actuator.reconcile.promote_runtime_root",
+        lambda *_: deploy_calls.append("promote"),
+    )
     monkeypatch.setattr(
         "unraid_actuator.reconcile.fast_forward_managed_checkout",
         lambda **_: deploy_calls.append("fast-forward"),
@@ -272,9 +292,7 @@ def test_reconcile_applies_candidate_logs_runtime_actions_and_fast_forwards_sour
     assert result.removed_targets == (removed_target,)
     assert order == ["promote", "fast-forward"]
     assert visibility.completed == [(True, "reconcile complete")]
-    assert [
-        (entry["summary"], entry["include_output"]) for entry in visibility.command_logs
-    ] == [
+    assert [(entry["summary"], entry["include_output"]) for entry in visibility.command_logs] == [
         ("teardown immich/preview", True),
         ("deploy desired state", True),
         ("fast-forward managed checkout", False),
@@ -297,7 +315,10 @@ def test_reconcile_dry_run_reports_planned_rebuild_without_mutating(
 
     monkeypatch.setattr("unraid_actuator.reconcile.acquire_reconcile_lock", lambda: _fake_lock())
     monkeypatch.setattr("unraid_actuator.reconcile.open_reconcile_log", lambda **_: visibility)
-    monkeypatch.setattr("unraid_actuator.reconcile.resolve_output_root", lambda _: tmp_path / "current-build")
+    monkeypatch.setattr(
+        "unraid_actuator.reconcile.resolve_output_root",
+        lambda _: tmp_path / "current-build",
+    )
     monkeypatch.setattr(
         "unraid_actuator.reconcile.inspect_managed_checkout",
         lambda **_: ManagedCheckoutState(
@@ -328,7 +349,10 @@ def test_reconcile_dry_run_reports_planned_rebuild_without_mutating(
     )
     monkeypatch.setattr("unraid_actuator.reconcile.run_teardown", lambda **_: calls.append("teardown"))
     monkeypatch.setattr("unraid_actuator.reconcile.run_deploy", lambda **_: calls.append("deploy"))
-    monkeypatch.setattr("unraid_actuator.reconcile.promote_runtime_root", lambda *_: calls.append("promote"))
+    monkeypatch.setattr(
+        "unraid_actuator.reconcile.promote_runtime_root",
+        lambda *_: calls.append("promote"),
+    )
     monkeypatch.setattr(
         "unraid_actuator.reconcile.fast_forward_managed_checkout",
         lambda **_: calls.append("fast-forward"),
@@ -371,7 +395,13 @@ class FakeVisibility:
     def log_failure(self, message: str) -> None:
         self.failures.append(message)
 
-    def log_command_result(self, result: CommandResult, *, summary: str | None = None, include_output: bool = False) -> None:
+    def log_command_result(
+        self,
+        result: CommandResult,
+        *,
+        summary: str | None = None,
+        include_output: bool = False,
+    ) -> None:
         self.command_logs.append(
             {
                 "result": result,

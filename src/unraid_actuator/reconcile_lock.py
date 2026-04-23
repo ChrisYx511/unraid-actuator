@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from contextlib import contextmanager
-from datetime import datetime, timezone
 import fcntl
 import os
+from collections.abc import Iterator
+from contextlib import contextmanager
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterator
 
 DEFAULT_RECONCILE_LOCK_PATH = Path("/tmp/unraid-actuator/reconcile.lock")
 _ACTIVE_LOCKS: set[Path] = set()
@@ -28,9 +28,7 @@ def acquire_reconcile_lock(path: Path = DEFAULT_RECONCILE_LOCK_PATH) -> Iterator
         _ACTIVE_LOCKS.add(resolved_path)
         handle.seek(0)
         handle.truncate()
-        handle.write(
-            f"pid={os.getpid()} acquired_at={datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}\n"
-        )
+        handle.write(f"pid={os.getpid()} acquired_at={datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')}\n")
         handle.flush()
         yield resolved_path
     finally:

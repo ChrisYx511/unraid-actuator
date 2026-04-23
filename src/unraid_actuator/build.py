@@ -20,8 +20,7 @@ from .schemas import load_declared_environments
 from .secrets import decrypt_secret_env, extract_environment_secrets
 from .template_render import render_template_environment
 from .validate import run_validate_for_host
-from .validation_models import ValidationReport
-from .validation_models import SourceKind
+from .validation_models import SourceKind, ValidationReport
 from .validation_rules import compose_project_name
 
 
@@ -49,13 +48,21 @@ def run_build_for_host(
     if validation_report.has_errors:
         raise ValueError(_format_validation_block(validation_report))
 
-    declared = tuple(sorted(load_declared_environments(host_root), key=lambda item: (item.app, item.environment)))
+    declared = tuple(
+        sorted(
+            load_declared_environments(host_root),
+            key=lambda item: (item.app, item.environment),
+        )
+    )
     discovered = discover_host_tree(host_root, declared)
     discovered_by_key = {(item.app, item.environment): item for item in discovered}
 
     for target in declared:
         candidate = discovered_by_key.get((target.app, target.environment))
-        if candidate is None or candidate.source_kind in {SourceKind.MISSING, SourceKind.AMBIGUOUS}:
+        if candidate is None or candidate.source_kind in {
+            SourceKind.MISSING,
+            SourceKind.AMBIGUOUS,
+        }:
             raise ValueError(f"declared environment is not buildable: {target.app}/{target.environment}")
 
     final_root = resolve_output_root(output_root)

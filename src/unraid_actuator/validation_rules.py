@@ -3,7 +3,13 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from .validation_models import DeclaredEnvironment, DiscoveredEnvironment, FindingSeverity, SourceKind, ValidationFinding
+from .validation_models import (
+    DeclaredEnvironment,
+    DiscoveredEnvironment,
+    FindingSeverity,
+    SourceKind,
+    ValidationFinding,
+)
 
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
@@ -16,7 +22,9 @@ def compose_project_name(app: str, environment: str) -> str:
     return f"{app}-{environment}"
 
 
-def findings_for_missing_declared(host_root: Path, missing: tuple[DeclaredEnvironment, ...]) -> tuple[ValidationFinding, ...]:
+def findings_for_missing_declared(
+    host_root: Path, missing: tuple[DeclaredEnvironment, ...]
+) -> tuple[ValidationFinding, ...]:
     return tuple(
         ValidationFinding(
             severity=FindingSeverity.ERROR,
@@ -30,15 +38,19 @@ def findings_for_missing_declared(host_root: Path, missing: tuple[DeclaredEnviro
     )
 
 
-def findings_for_discovered(candidate: DiscoveredEnvironment) -> tuple[ValidationFinding, ...]:
+def findings_for_discovered(
+    candidate: DiscoveredEnvironment,
+) -> tuple[ValidationFinding, ...]:
     if candidate.source_kind in {SourceKind.COMPOSE, SourceKind.TEMPLATE}:
         return ()
 
     code = "SOURCE_XOR" if candidate.source_kind == SourceKind.AMBIGUOUS else "SOURCE_MISSING"
     message = (
-        "Environment must define exactly one supported source: one docker-compose file or one template descriptor paired with one values file."
+        "Environment must define exactly one supported source: one docker-compose "
+        "file or one template descriptor paired with one values file."
         if code == "SOURCE_XOR"
-        else "Environment must define docker-compose.yml/docker-compose.yaml or template.yml/template.yaml with matching values.yml/values.yaml."
+        else "Environment must define docker-compose.yml/docker-compose.yaml or "
+        "template.yml/template.yaml with matching values.yml/values.yaml."
     )
     return (
         ValidationFinding(
@@ -61,7 +73,13 @@ def findings_for_project_names(
         (candidate.app, candidate.environment, candidate.declared, candidate.path) for candidate in discovered
     ]
     targets.extend(
-        (target.app, target.environment, True, host_root / target.app / target.environment) for target in missing
+        (
+            target.app,
+            target.environment,
+            True,
+            host_root / target.app / target.environment,
+        )
+        for target in missing
     )
 
     findings: list[ValidationFinding] = []

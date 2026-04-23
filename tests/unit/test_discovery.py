@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from unraid_actuator.discovery import discover_host_tree, find_missing_declared_environments
+from unraid_actuator.discovery import (
+    discover_host_tree,
+    find_missing_declared_environments,
+)
 from unraid_actuator.validation_models import DeclaredEnvironment, SourceKind
 
 
@@ -28,7 +31,9 @@ def test_discovery_walks_host_tree_and_marks_declared_targets(tmp_path: Path) ->
     assert discovered[1].source_kind == SourceKind.COMPOSE
 
 
-def test_source_classification_covers_missing_and_ambiguous_inputs(tmp_path: Path) -> None:
+def test_source_classification_covers_missing_and_ambiguous_inputs(
+    tmp_path: Path,
+) -> None:
     host_root = tmp_path / "PotatoServer"
     (host_root / "missing" / "prod").mkdir(parents=True)
     (host_root / "ambiguous" / "prod").mkdir(parents=True)
@@ -57,7 +62,9 @@ def test_source_classification_covers_missing_and_ambiguous_inputs(tmp_path: Pat
     assert kinds[("duplicate-template", "prod")] == SourceKind.AMBIGUOUS
 
 
-def test_find_missing_declared_environments_reports_absent_paths(tmp_path: Path) -> None:
+def test_find_missing_declared_environments_reports_absent_paths(
+    tmp_path: Path,
+) -> None:
     host_root = tmp_path / "PotatoServer"
     (host_root / "nextcloud" / "production").mkdir(parents=True)
     declared = (

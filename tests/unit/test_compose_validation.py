@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
-from unraid_actuator.compose_validation import validate_static_compose, validate_template_source
+from unraid_actuator.compose_validation import (
+    validate_static_compose,
+    validate_template_source,
+)
 from unraid_actuator.runner import CommandResult, RecordingRunner
 from unraid_actuator.validation_models import DiscoveredEnvironment, SourceKind
 

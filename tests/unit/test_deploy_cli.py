@@ -40,7 +40,15 @@ def test_deploy_dispatches_default_and_custom_scope(monkeypatch: pytest.MonkeyPa
     assert "Deployed 0 target(s) from /tmp/unraid-actuator/build" in capsys.readouterr().out
 
     exit_code = main(
-        ["deploy", "--build-root", "/custom/build", "--app", "nextcloud", "--environment", "production"],
+        [
+            "deploy",
+            "--build-root",
+            "/custom/build",
+            "--app",
+            "nextcloud",
+            "--environment",
+            "production",
+        ],
         config_path=config_path,
     )
     assert exit_code == 0
@@ -77,7 +85,15 @@ def test_teardown_dispatches_and_returns_one_on_failure(
     monkeypatch.setattr("unraid_actuator.cli.run_teardown", fake_run_teardown)
 
     exit_code = main(
-        ["teardown", "--build-root", "/custom/build", "--app", "nextcloud", "--environment", "production"],
+        [
+            "teardown",
+            "--build-root",
+            "/custom/build",
+            "--app",
+            "nextcloud",
+            "--environment",
+            "production",
+        ],
         config_path=config_path,
     )
 

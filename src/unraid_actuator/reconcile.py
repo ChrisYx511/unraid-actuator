@@ -6,12 +6,16 @@ from .build import run_build_for_host
 from .build_paths import promote_runtime_root, resolve_output_root
 from .config import ACTIVE_CONFIG_PATH, load_active_config
 from .deploy import run_deploy, run_teardown
-from .reconcile_git import fast_forward_managed_checkout, inspect_managed_checkout, prepare_candidate_checkout
+from .reconcile_git import (
+    fast_forward_managed_checkout,
+    inspect_managed_checkout,
+    prepare_candidate_checkout,
+)
 from .reconcile_lock import acquire_reconcile_lock
 from .reconcile_models import ReconcileResult, ReconcileStatus, RemovedTargetsPlan
 from .reconcile_plan import plan_removed_targets
-from .reconcile_visibility import open_reconcile_log
-from .runner import CommandRunner
+from .reconcile_visibility import ReconcileVisibility, open_reconcile_log
+from .runner import CommandResult, CommandRunner
 from .validate import run_validate_for_host
 
 
@@ -68,7 +72,10 @@ def run_reconcile(
                 if dry_run:
                     detail = _dry_run_detail(removal_plan)
                     visibility.log_event(
-                        f"reconcile dry-run candidate={managed_state.candidate_sha} removed={len(removal_plan.removed_declarations)} {detail}"
+                        "reconcile dry-run "
+                        f"candidate={managed_state.candidate_sha} "
+                        f"removed={len(removal_plan.removed_declarations)} "
+                        f"{detail}"
                     )
                     visibility.log_completed(notify=False)
                     return ReconcileResult(
@@ -148,7 +155,7 @@ def _ensure_current_runtime_for_removals(
     current_runtime_root: Path,
     incoming_host_root: Path,
     removal_plan: RemovedTargetsPlan,
-    visibility,
+    visibility: ReconcileVisibility,
 ) -> RemovedTargetsPlan:
     if not removal_plan.requires_current_rebuild:
         return removal_plan
@@ -169,7 +176,12 @@ def _ensure_current_runtime_for_removals(
     return refreshed_plan
 
 
-def _log_runtime_action(visibility, command_results, *, summary: str) -> None:
+def _log_runtime_action(
+    visibility: ReconcileVisibility,
+    command_results: tuple[CommandResult, ...],
+    *,
+    summary: str,
+) -> None:
     for result in command_results:
         visibility.log_command_result(result, summary=summary, include_output=True)
 

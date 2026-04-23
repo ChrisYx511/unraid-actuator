@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from strictyaml import YAMLValidationError
 
 from unraid_actuator.build_paths import BUILD_MARKER_NAME
@@ -78,7 +77,9 @@ def test_plan_removed_targets_propagates_invalid_incoming_state(tmp_path: Path) 
     incoming_host_root = tmp_path / "incoming"
     _write_apps(current_host_root, "apps:\n  immich:\n    - preview\n")
     incoming_host_root.mkdir(parents=True, exist_ok=True)
-    (incoming_host_root / "apps.yaml").write_text("apps:\n  immich:\n    environments:\n      - preview\n", encoding="utf-8")
+    (incoming_host_root / "apps.yaml").write_text(
+        "apps:\n  immich:\n    environments:\n      - preview\n", encoding="utf-8"
+    )
 
     with pytest.raises(YAMLValidationError):
         plan_removed_targets(

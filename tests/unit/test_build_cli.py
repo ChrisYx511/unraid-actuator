@@ -32,7 +32,13 @@ def test_build_passes_custom_output_path(monkeypatch, tmp_path: Path) -> None:
         called.update(kwargs)
         return BuildResult(
             output_root=Path("/custom/build"),
-            built_targets=(BuildTarget(app="nextcloud", environment="production", output_dir=Path("/custom/build/nextcloud/production")),),
+            built_targets=(
+                BuildTarget(
+                    app="nextcloud",
+                    environment="production",
+                    output_dir=Path("/custom/build/nextcloud/production"),
+                ),
+            ),
         )
 
     monkeypatch.setattr("unraid_actuator.cli.run_build", fake_run_build)
@@ -45,7 +51,10 @@ def test_build_passes_custom_output_path(monkeypatch, tmp_path: Path) -> None:
 
 def test_build_failure_returns_one(monkeypatch, tmp_path: Path, capsys) -> None:
     config_path = _write_active_config(tmp_path)
-    monkeypatch.setattr("unraid_actuator.cli.run_build", lambda **_: (_ for _ in ()).throw(ValueError("bad build")) )
+    monkeypatch.setattr(
+        "unraid_actuator.cli.run_build",
+        lambda **_: (_ for _ in ()).throw(ValueError("bad build")),
+    )
 
     exit_code = main(["build"], config_path=config_path)
 
@@ -61,7 +70,9 @@ def test_build_validation_block_returns_one_with_service_message(
     config_path = _write_active_config(tmp_path)
     monkeypatch.setattr(
         "unraid_actuator.cli.run_build",
-        lambda **_: (_ for _ in ()).throw(ValueError("build blocked by validation errors: nextcloud/production (DECLARED_MISSING)")),
+        lambda **_: (_ for _ in ()).throw(
+            ValueError("build blocked by validation errors: nextcloud/production (DECLARED_MISSING)")
+        ),
     )
 
     exit_code = main(["build"], config_path=config_path)

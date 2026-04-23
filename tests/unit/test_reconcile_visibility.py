@@ -6,7 +6,9 @@ from unraid_actuator.reconcile_visibility import open_reconcile_log
 from unraid_actuator.runner import CommandResult, RecordingRunner
 
 
-def test_open_reconcile_log_creates_timestamped_file_and_only_logs_selected_output(tmp_path: Path) -> None:
+def test_open_reconcile_log_creates_timestamped_file_and_only_logs_selected_output(
+    tmp_path: Path,
+) -> None:
     log_dir = tmp_path / "logs"
     runner = RecordingRunner(executed=True)
 
@@ -58,7 +60,10 @@ def test_success_notification_runs_when_notify_is_available(tmp_path: Path) -> N
     ) as visibility:
         visibility.log_success("reconcile complete", notify=True)
 
-    assert [call.argv[0] for call in runner.calls] == ["logger", "/usr/local/emhttp/webGui/scripts/notify"]
+    assert [call.argv[0] for call in runner.calls] == [
+        "logger",
+        "/usr/local/emhttp/webGui/scripts/notify",
+    ]
 
 
 def test_missing_notify_is_warning_only_for_failures(tmp_path: Path) -> None:

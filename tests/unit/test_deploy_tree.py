@@ -6,10 +6,16 @@ import pytest
 
 from unraid_actuator.build_paths import BUILD_MARKER_NAME
 from unraid_actuator.config import ActiveConfig, save_active_config
-from unraid_actuator.deploy_tree import require_marked_runtime_tree, resolve_full_tree_targets, resolve_scoped_target
+from unraid_actuator.deploy_tree import (
+    require_marked_runtime_tree,
+    resolve_full_tree_targets,
+    resolve_scoped_target,
+)
 
 
-def test_full_tree_targets_preserve_declared_order_and_append_stale_targets(tmp_path: Path) -> None:
+def test_full_tree_targets_preserve_declared_order_and_append_stale_targets(
+    tmp_path: Path,
+) -> None:
     config_path = _write_active_config(tmp_path)
     host_root = tmp_path / "source" / "PotatoServer"
     host_root.mkdir(parents=True, exist_ok=True)

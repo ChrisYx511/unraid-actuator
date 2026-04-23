@@ -8,8 +8,20 @@ from .config import ACTIVE_CONFIG_PATH, load_active_config
 from .discovery import discover_host_tree, find_missing_declared_environments
 from .runner import CommandRunner
 from .schemas import load_declared_environments, validate_secret_env_structure
-from .validation_models import DeclaredEnvironment, DiscoveredEnvironment, FindingSeverity, SourceKind, ValidationFinding, ValidationReport
-from .validation_rules import compose_project_name, findings_for_discovered, findings_for_missing_declared, findings_for_project_names
+from .validation_models import (
+    DeclaredEnvironment,
+    DiscoveredEnvironment,
+    FindingSeverity,
+    SourceKind,
+    ValidationFinding,
+    ValidationReport,
+)
+from .validation_rules import (
+    compose_project_name,
+    findings_for_discovered,
+    findings_for_missing_declared,
+    findings_for_project_names,
+)
 
 
 def run_validate(
@@ -101,7 +113,9 @@ def run_validate_for_host(
 
     return ValidationReport(
         findings=tuple(findings),
-        checked_targets=(DeclaredEnvironment(app=app, environment=environment),) if app and environment else checked_targets,
+        checked_targets=(DeclaredEnvironment(app=app, environment=environment),)
+        if app and environment
+        else checked_targets,
     )
 
 

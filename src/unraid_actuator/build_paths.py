@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from pathlib import Path
 import shutil
 import tempfile
+from pathlib import Path
 
 DEFAULT_BUILD_ROOT = Path("/tmp/unraid-actuator/build")
 BUILD_MARKER_NAME = ".UNRAID_RUNNING_CONFIGURATION"
