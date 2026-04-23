@@ -26,4 +26,4 @@ uv run basedpyright
 The repository includes example shell scripts for first-time Unraid setup:
 
 - `scripts/1_actuator-install.sh` installs `uv`, installs Python 3.13 through `uv`, and installs `unraid-actuator` as a uv-managed tool.
-- `scripts/4_actuator-init.sh.template` shows one way to copy EJSON keys into place, initialize the actuator, validate the configured host, and build the runtime tree.
+- `scripts/4_actuator-init.sh.template` shows one way to copy EJSON keys into `/opt/ejson/keys`, initialize the actuator, validate the configured host, and build the runtime tree without any extra secret-key environment variable.

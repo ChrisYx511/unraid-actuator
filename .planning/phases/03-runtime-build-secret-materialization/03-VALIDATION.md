@@ -70,7 +70,7 @@ created: 2026-04-22
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
 | Real `docker compose config --no-interpolate --format yaml` compatibility for both static and template sources | BLD-04 | Docker Compose CLI is not installed in this planning environment | On a Docker-equipped host, run `unraid-actuator build` against one static compose environment and one template-driven environment; confirm both emit normalized `docker-compose.yml` files without interpolated secret values |
-| Real EJSON decrypt compatibility on the target host | BLD-06 | Secret handling depends on installed EJSON keys/runtime outside this environment | On a host with EJSON configured, run `unraid-actuator build` with `UNRAID_ACTUATOR_SECRET_KEY` or host EJSON key material configured and confirm successful `.env` generation for a known secret-bearing environment |
+| Real EJSON decrypt compatibility on the target host | BLD-06 | Secret handling depends on installed EJSON keys/runtime outside this environment | On a host with EJSON configured, copy the host key material into `/opt/ejson/keys`, run `unraid-actuator build`, and confirm successful `.env` generation for a known secret-bearing environment |
 
 ---
 
