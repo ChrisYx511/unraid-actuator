@@ -7,12 +7,12 @@ install_uv() {
     fi
 
     if command -v curl >/dev/null 2>&1; then
-        UV_NO_MODIFY_PATH=1 curl -LsSf https://astral.sh/uv/install.sh | sh
+        curl -LsSf https://astral.sh/uv/install.sh | sh
         return
     fi
 
     if command -v wget >/dev/null 2>&1; then
-        UV_NO_MODIFY_PATH=1 wget -qO- https://astral.sh/uv/install.sh | sh
+        wget -qO- https://astral.sh/uv/install.sh | sh
         return
     fi
 
