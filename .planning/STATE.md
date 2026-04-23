@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Initial Release
 status: Planning next milestone
-stopped_at: Quick task 260423-1pv completed
-last_updated: "2026-04-23T05:15:04Z"
-last_activity: 2026-04-23 -- Completed quick task 260423-1pv to let the Unraid uv installer update PATH normally
+stopped_at: Quick task 260423-1uo completed
+last_updated: "2026-04-23T05:21:15Z"
+last_activity: 2026-04-23 -- Completed quick task 260423-1uo to allow template imports from the app directory while still blocking upward traversal
 progress:
   total_phases: 7
   completed_phases: 7
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-23)
 Phase: Milestone archived (v1.0 complete)
 Plan: No active phase plans
 Status: Planning next milestone
-Last activity: 2026-04-23 -- Completed quick task 260423-1pv to let the Unraid uv installer update PATH normally
+Last activity: 2026-04-23 -- Completed quick task 260423-1uo to allow template imports from the app directory while still blocking upward traversal
 
 Progress: [██████████] 100%
 
@@ -91,9 +91,10 @@ None.
 | 260422-xbd | Remove __future__ annotations imports and replace deprecated typing imports with modern Python 3.13 equivalents | 2026-04-23 | a6054a1 | [260422-xbd-remove-future-annotations-imports-and-re](./quick/260422-xbd-remove-future-annotations-imports-and-re/) |
 | 260423-1hi | Add Unraid boot install and actuator init scripts | 2026-04-23 | 1185b1b | [260423-1hi-add-unraid-boot-install-and-actuator-ini](./quick/260423-1hi-add-unraid-boot-install-and-actuator-ini/) |
 | 260423-1pv | Remove UV_NO_MODIFY_PATH from the Unraid install script | 2026-04-23 | 01ba9d4 | [260423-1pv-remove-uv-no-modify-path-from-the-unraid](./quick/260423-1pv-remove-uv-no-modify-path-from-the-unraid/) |
+| 260423-1uo | Allow template imports from the app directory but never above it | 2026-04-23 | 99d6168 | [260423-1uo-allow-template-imports-from-the-app-dire](./quick/260423-1uo-allow-template-imports-from-the-app-dire/) |
 
 ## Session Continuity
 
-Last session: 2026-04-23T05:15:04Z
-Stopped at: Quick task 260423-1pv completed
-Resume file: .planning/quick/260423-1pv-remove-uv-no-modify-path-from-the-unraid/260423-1pv-SUMMARY.md
+Last session: 2026-04-23T05:21:15Z
+Stopped at: Quick task 260423-1uo completed
+Resume file: .planning/quick/260423-1uo-allow-template-imports-from-the-app-dire/260423-1uo-SUMMARY.md
